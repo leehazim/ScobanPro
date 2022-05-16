@@ -1,5 +1,15 @@
 #include "01.Function.h"
 
+/// <summary>
+/// 작성자 : 이승현
+/// 최초작성일 : 2022. 05.14
+/// 마지막수정일 : 2022.05.22
+/// 
+/// 비트맵 경로를 가져와서 DIB비트맵을 DDB비트맵으로 변환
+/// </summary>
+/// <param name="hdc"> 비트맵을 그리고 나서 DDB로 바꾸기 위한 임시 HDC </param>
+/// <param name="Path"> 비트맵파일 경로 </param>
+/// <returns> DDB로 변환된 비트맵 핸들 </returns>
 HBITMAP LoadMyBitmap(HDC hdc, TCHAR* Path) {
 
 	HANDLE hFile;
@@ -21,6 +31,17 @@ HBITMAP LoadMyBitmap(HDC hdc, TCHAR* Path) {
 	return hBit;
 }
 
+/// <summary>
+/// 작성자 : 이승현
+/// 최초작성일 : 2022. 05.14
+/// 마지막수정일 : 2022.05.22
+/// 
+/// 비트맵을 그리는 함수 랩핑
+/// </summary>
+/// <param name="hdc"> 비트맵을 그릴 DC핸들 </param>
+/// <param name="x"> 비트맵이 그려질 x좌표 </param>
+/// <param name="y"> 비트맵이 그려질 y좌표 </param>
+/// <param name="hBit"> 그릴 비트맵 핸들 </param>
 void DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit) {
 
 	HDC MemDC;
