@@ -1,22 +1,13 @@
 #include <Windows.h>
 #include <vector>
+#include "resource.h"
 #pragma comment(lib, "Msimg32")
 
-#define BLOCK_WIDTH 32
-#define BLOCK_HEIGHT 32
-#define MAX_WIDTH 10
-#define MAX_HEIGHT 15
-
 HBITMAP Tiles[5];
-HWND TileWnd[150];
+HWND TileWnd[MAX_HEIGHT][MAX_WIDTH];
 enum tag_Tile { WALL, BOX, MAN, GOAL, WAY };
 int countBox = 0, countGoal = 0, countStage = 0;
-std::vector<int*> Maps;
-
-struct tag_map {
-	int map[MAX_HEIGHT][MAX_WIDTH];
-	int stage;
-};
+std::vector<tag_map> Maps;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK TileProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
@@ -24,7 +15,7 @@ LPCTSTR lpszClass = TEXT("MapMaker");
 LPCTSTR lpszTile = TEXT("Tile");
 HINSTANCE g_hInst;
 HWND g_hMainWnd;
-HWND hStatic;
+HWND hStatic; TCHAR str[128];
 
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow) {
@@ -41,7 +32,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	ws.hCursor = LoadCursor(NULL, IDC_ARROW);
 	ws.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	ws.lpszClassName = lpszClass;
-	ws.lpszMenuName = NULL;
+	ws.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1);
 	RegisterClass(&ws);
 
 	ws.lpfnWndProc = TileProc;
@@ -101,14 +92,26 @@ void DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit) {
 	DeleteDC(MemDC);
 }
 
+void SaveFile() {
+	HANDLE hFile;
+	tag_map tmp;
+	std::vector<tag_map>::iterator it;
+	it = Maps.begin();
+	
+	for (int i = 0; i < MAX_HEIGHT; i++) {
+		for (int j = 0; j < MAX_WIDTH; j++) {
+			tmp.map[i][j] = GetWindowLongPtr(TileWnd[i][j], 0);
+		}
+	}
+}
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
 
 	OPENFILENAME OFN;
 	TCHAR lpszStr[MAX_PATH] = TEXT("");
 	DWORD dwRead;
 	HDC hdc; PAINTSTRUCT ps;
-	int count = 0;
-	TCHAR str[128];
+	RECT staticRect;
 
 	switch (iMessage) {
 	case WM_CREATE:
@@ -127,15 +130,37 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			}
 		}
 		for (int i = 0; i < MAX_HEIGHT; i++) {
-			for(int j = 0, count = 0; j < MAX_WIDTH; j++, count++)
-				TileWnd[count] = CreateWindow(lpszTile, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
+			for(int j = 0; j < MAX_WIDTH; j++)
+				TileWnd[i][j] = CreateWindow(lpszTile, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
 										  j*32, i*32, 32, 32, hwnd, (HMENU)NULL, g_hInst, NULL);
 		}
 
 		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), countBox, countGoal);
+		
 		hStatic = CreateWindow(TEXT("static"), str, WS_CHILD | WS_VISIBLE,
 							   500, 10, 200, 25, hwnd, (HMENU)0, g_hInst, NULL);
 		return 0;
+
+	case WM_COMMAND:
+		switch (LOWORD(wParam)) {
+		case ID_SAVE:
+			break;
+		case ID_LOAD:
+			break;
+		}
+		return 0;
+
+	case WM_SIZE:
+		SendMessage(hwnd, MESSAGE_STATICPAINT, 0, 0);
+		return 0;
+
+	case MESSAGE_STATICPAINT:
+		GetClientRect(hStatic, &staticRect);
+		hdc = GetDC(hStatic);
+		FillRect(hdc, &staticRect, (HBRUSH)GetStockObject(WHITE_BRUSH));
+		TextOut(hdc, 5, 5, str, lstrlen(str));
+		ReleaseDC(hStatic, hdc);
+		return 0; 
 
 	case WM_PAINT:
 		hdc = BeginPaint(hwnd, &ps);
@@ -153,7 +178,7 @@ LRESULT CALLBACK TileProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 
 	HDC hdc; PAINTSTRUCT ps;
 	int tmp;
-	TCHAR str[128];
+
 	wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), countBox, countGoal);
 	switch (iMessage) {
 	case WM_CREATE:
@@ -171,7 +196,7 @@ LRESULT CALLBACK TileProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 		SetWindowLongPtr(hwnd, 0, tmp);
 		InvalidateRect(hwnd, NULL, TRUE);
 		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), countBox, countGoal);
-		SetWindowText(hStatic, str);
+		SendMessage(g_hMainWnd, MESSAGE_STATICPAINT, 0, 0);
 		return 0;
 
 	case WM_PAINT:
