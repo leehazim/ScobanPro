@@ -1,24 +1,25 @@
-#include <vector>
 #include "01.Function.h"
 #pragma comment(lib, "Msimg32")
-
-std::vector<int*> Maps;
 
 // 윈도우클래스를 설정하기 위한 식별자
 LPCTSTR lpszClass = TEXT("MapMaker");
 LPCTSTR lpszTile = TEXT("Tile");
 
 // 윈도우인스턴스와 윈도우핸들 전역변수로 관리
+HWND TileWnd[MAX_HEIGHT][MAX_WIDTH];
+HWND TileTemp[150];
 HINSTANCE g_hInst;
 HWND g_hMainWnd;
 HWND hStatic;
-HWND TileWnd[150];
+HWND hCombobox;
 
 // Child윈도우들의 정보들 담아두기위한 변수들
 HBITMAP Tiles[5];
 int countBox = 0;
 int countGoal = 0;
 int countStage = 0;
+int nowStage;
+extern std::vector<tag_map> Maps;
 
 /// <summary>
 /// 작성일 : 2022년 5월 11일 
@@ -42,7 +43,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	ws.hCursor = LoadCursor(NULL, IDC_ARROW);
 	ws.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	ws.lpszClassName = lpszClass;
-	ws.lpszMenuName = NULL;
+	ws.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1);
 	RegisterClass(&ws);
 
 	ws.lpfnWndProc = TileProc;
@@ -64,7 +65,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 
 /// <summary>
 /// 작성일 : 2022년 5월 11일
-/// 최종 수정일 : 2022년 5월 14일
+/// 최종 수정일 : 2022년 5월 17일
 /// 
 /// 내용:
 /// 메인 윈도우 프로시저 비트맵을 불러오고 타일윈도우들을 생성하고,
@@ -79,7 +80,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	TCHAR lpszStr[MAX_PATH] = TEXT("");
 	DWORD dwRead;
 	HDC hdc; PAINTSTRUCT ps;
-	int count = 0;
 	TCHAR str[128];
 
 	switch (iMessage) {
@@ -100,15 +100,46 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		}
 		for (int i = 0; i < MAX_HEIGHT; i++) {
 			for (int j = 0; j < MAX_WIDTH; j++) {
-				TileWnd[count] = CreateWindow(lpszTile, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
-											  j * 32, i * 32, 32, 32, hwnd, (HMENU)NULL, g_hInst, NULL);
-				count++;
+				TileWnd[i][j] = CreateWindow(lpszTile, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
+											 j * 32, i * 32, 32, 32, hwnd, (HMENU)NULL, g_hInst, NULL);
 			}
 		}
 
+
 		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), countBox, countGoal);
 		hStatic = CreateWindow(TEXT("static"), str, WS_CHILD | WS_VISIBLE,
-							   500, 10, 200, 25, hwnd, (HMENU)0, g_hInst, NULL);
+							   10, MAX_HEIGHT * 32 + 10, 200, 25, hwnd, (HMENU)0, g_hInst, NULL);
+		hCombobox = CreateWindow(TEXT("combobox"), NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | CBS_DROPDOWN,
+								 400, 10, 100, 30, hwnd, (HMENU)ID_COMBO, g_hInst, NULL);
+		Load();
+		if (countStage != 0) {
+			for (int i = 1; i <= countStage; i++) {
+				wsprintf(str, TEXT("stage%d"), i);
+				SendMessage(hCombobox, CB_ADDSTRING, 0, (LPARAM)str);
+			}
+		}
+		return 0;
+
+	case WM_COMMAND:
+		switch (LOWORD(wParam)) {
+		case ID_SAVE:
+			for (int i = 0, count = 0; i < MAX_HEIGHT; i++) {
+				for (int j = 0; j < MAX_WIDTH; j++) {
+					TileTemp[count] = TileWnd[i][j];
+					count++;
+				}
+			}
+			Save(TileTemp);
+			break;
+
+		case ID_LOAD:
+			Load();
+			break;
+
+		case ID_COMBO:
+
+			break;
+		}
 		return 0;
 
 	case WM_PAINT:
@@ -152,10 +183,12 @@ LRESULT CALLBACK TileProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 		
 		countGoal = 0;
 		countBox = 0;
-		for(int i = 0; i< MAX_TILE; i++){
-			tmp = GetWindowLongPtr(TileWnd[i], 0);
-			if (tmp == GOAL) countGoal++;
-			else if (tmp == BOX) countBox++;
+		for (int i = 0; i < MAX_HEIGHT; i++) {
+			for (int j = 0; j < MAX_WIDTH; j++) {
+				tmp = GetWindowLongPtr(TileWnd[i][j], 0);
+				if (tmp == GOAL) countGoal++;
+				else if (tmp == BOX) countBox++;
+			}
 		}
 
 		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), countBox, countGoal);

@@ -26,12 +26,12 @@
     <ClInclude Include="01.Function.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="resource1.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MapMaker.rc">
+    <ResourceCompile Include="MapMaker1.rc">
       <Filter>리소스 파일</Filter>
     </ResourceCompile>
   </ItemGroup>
