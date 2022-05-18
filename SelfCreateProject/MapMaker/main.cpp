@@ -7,11 +7,10 @@ LPCTSTR lpszTile = TEXT("Tile");
 
 // 윈도우인스턴스와 윈도우핸들 전역변수로 관리
 HWND TileWnd[MAX_HEIGHT][MAX_WIDTH];
-HWND TileTemp[150];
 HINSTANCE g_hInst;
 HWND g_hMainWnd;
 HWND hStatic;
-HWND hCombobox;
+HWND hlistbox;
 
 // Child윈도우들의 정보들 담아두기위한 변수들
 HBITMAP Tiles[5];
@@ -19,7 +18,21 @@ int countBox = 0;
 int countGoal = 0;
 int countStage = 0;
 int nowStage;
-extern std::vector<tag_map> Maps;
+
+const int Max_stage = 10;
+tag_map Maps[Max_stage];
+const TCHAR* ID_Stage[Max_stage] = {
+	TEXT("stage1"),
+	TEXT("stage2"),
+	TEXT("stage3"),
+	TEXT("stage4"),
+	TEXT("stage5"),
+	TEXT("stage6"),
+	TEXT("stage7"),
+	TEXT("stage8"),
+	TEXT("stage9"),
+	TEXT("stage10")
+};
 
 /// <summary>
 /// 작성일 : 2022년 5월 11일 
@@ -109,35 +122,43 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), countBox, countGoal);
 		hStatic = CreateWindow(TEXT("static"), str, WS_CHILD | WS_VISIBLE,
 							   10, MAX_HEIGHT * 32 + 10, 200, 25, hwnd, (HMENU)0, g_hInst, NULL);
-		hCombobox = CreateWindow(TEXT("combobox"), NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | CBS_DROPDOWN,
-								 400, 10, 100, 30, hwnd, (HMENU)ID_COMBO, g_hInst, NULL);
-		Load();
-		if (countStage != 0) {
-			for (int i = 1; i <= countStage; i++) {
-				wsprintf(str, TEXT("stage%d"), i);
-				SendMessage(hCombobox, CB_ADDSTRING, 0, (LPARAM)str);
-			}
+		hlistbox = CreateWindow(TEXT("listbox"), NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | LBS_NOTIFY,
+								 400, 10, 100, 300, hwnd, (HMENU)ID_LIST, g_hInst, NULL);
+
+	for (int i = 0; i < Max_stage; i++) {
+			SendMessage(hlistbox, LB_ADDSTRING, 0, (LPARAM)ID_Stage[i]);
 		}
 		return 0;
 
 	case WM_COMMAND:
 		switch (LOWORD(wParam)) {
 		case ID_SAVE:
-			for (int i = 0, count = 0; i < MAX_HEIGHT; i++) {
-				for (int j = 0; j < MAX_WIDTH; j++) {
-					TileTemp[count] = TileWnd[i][j];
-					count++;
-				}
-			}
-			Save(TileTemp);
+			Save();
 			break;
 
 		case ID_LOAD:
 			Load();
 			break;
 
-		case ID_COMBO:
+		case ID_LIST:
+			switch (HIWORD(wParam)) {
+			case LBN_SELCHANGE:
+				for (int i = 0; i < Max_stage; i++) {
+					GetWindowText(hlistbox, str, 100);
+					if (lstrcmp(str, ID_Stage[i]) == 0) {
+						nowStage = i;
+					}
+				}	
 
+				for (int i = 0; i < MAX_HEIGHT; i++) {
+					for (int j = 0; j < MAX_WIDTH; j++) {
+						SetWindowLongPtr(TileWnd[i][j], 0, Maps[nowStage].map[i][j]);
+						InvalidateRect(TileWnd[i][j], NULL, TRUE);
+					}
+				}
+				
+				break;
+			}
 			break;
 		}
 		return 0;
@@ -172,6 +193,11 @@ LRESULT CALLBACK TileProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 	switch (iMessage) {
 	case WM_CREATE:
 		SetWindowLongPtr(hwnd, 0, WALL);
+		return 0;
+
+	case MESSAGE_CHANGE:
+		SetWindowLongPtr(hwnd, 0, lParam);
+		InvalidateRect(hwnd, NULL, TRUE);
 		return 0;
 
 	case WM_LBUTTONDOWN:

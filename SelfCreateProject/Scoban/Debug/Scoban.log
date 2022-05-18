@@ -1,8 +1,1 @@
-﻿  main.cpp
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Scoban\main.cpp(88,9): warning C4101: 'bit' :참조되지 않은 지역 변수입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Scoban\main.cpp(87,9): warning C4101: 'y' :참조되지 않은 지역 변수입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Scoban\main.cpp(87,6): warning C4101: 'x' :참조되지 않은 지역 변수입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Scoban\main.cpp(218,6): warning C4101: 'MemDC' :참조되지 않은 지역 변수입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Scoban\main.cpp(219,10): warning C4101: 'OldBitmap' :참조되지 않은 지역 변수입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Scoban\main.cpp(220,7): warning C4101: 'rt' :참조되지 않은 지역 변수입니다.
-  Scoban.vcxproj -> C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Debug\Scoban.exe
+﻿  Scoban.vcxproj -> C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Debug\Scoban.exe

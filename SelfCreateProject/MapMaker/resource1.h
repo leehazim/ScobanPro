@@ -5,8 +5,8 @@
 #define IDR_MENU1                       101
 #define ID_SAVE                         40003
 #define ID_LOAD                         40004
-#define ID_COMBO						1001
-#define MESSAGE_LOADCOMPLATE			WM_USER+1
+#define ID_LIST							1001
+#define MESSAGE_CHANGE			WM_USER+1
 
 #define BLOCK_WIDTH						32
 #define BLOCK_HEIGHT					32
