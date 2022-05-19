@@ -17,7 +17,7 @@ HBITMAP Tiles[5];
 int countBox = 0;
 int countGoal = 0;
 int countStage = 0;
-int nowStage;
+int nowStage = 0;
 
 const int Max_stage = 10;
 tag_map Maps[Max_stage];
@@ -94,6 +94,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	DWORD dwRead;
 	HDC hdc; PAINTSTRUCT ps;
 	TCHAR str[128];
+	int tmp;
 
 	switch (iMessage) {
 	case WM_CREATE:
@@ -111,23 +112,48 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 				ReleaseDC(hwnd, hdc);
 			}
 		}
+	
 		for (int i = 0; i < MAX_HEIGHT; i++) {
 			for (int j = 0; j < MAX_WIDTH; j++) {
 				TileWnd[i][j] = CreateWindow(lpszTile, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
 											 j * 32, i * 32, 32, 32, hwnd, (HMENU)NULL, g_hInst, NULL);
 			}
 		}
-
-
-		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), countBox, countGoal);
 		hStatic = CreateWindow(TEXT("static"), str, WS_CHILD | WS_VISIBLE,
 							   10, MAX_HEIGHT * 32 + 10, 200, 25, hwnd, (HMENU)0, g_hInst, NULL);
 		hlistbox = CreateWindow(TEXT("listbox"), NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | LBS_NOTIFY,
 								 400, 10, 100, 300, hwnd, (HMENU)ID_LIST, g_hInst, NULL);
-
-	for (int i = 0; i < Max_stage; i++) {
+	
+		for (int i = 0; i < Max_stage; i++) {
 			SendMessage(hlistbox, LB_ADDSTRING, 0, (LPARAM)ID_Stage[i]);
 		}
+
+		Load();
+		nowStage = 0;
+		for (int j = 0; j < MAX_HEIGHT; j++) {
+			for (int k = 0; k < MAX_WIDTH; k++) {
+				SetWindowLongPtr(TileWnd[j][k], 0, Maps[nowStage].map[j][k]);
+			}
+		}
+		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), Maps[nowStage].cntBox, Maps[nowStage].cntGoal);
+
+		SendMessage(hlistbox, LB_SETCURSEL, 0, 0);
+		
+		return 0;
+
+	case MESSAGE_CHANGE:
+		countGoal = 0;
+		countBox = 0;
+		for (int i = 0; i < MAX_HEIGHT; i++) {
+			for (int j = 0; j < MAX_WIDTH; j++) {
+				tmp = GetWindowLongPtr(TileWnd[i][j], 0);
+				if (tmp == GOAL) countGoal++;
+				else if (tmp == BOX) countBox++;
+			}
+		}
+
+		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), countBox, countGoal);
+		SetWindowText(hStatic, str);
 		return 0;
 
 	case WM_COMMAND:
@@ -143,12 +169,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		case ID_LIST:
 			switch (HIWORD(wParam)) {
 			case LBN_SELCHANGE:
-				for (int i = 0; i < Max_stage; i++) {
-					GetWindowText(hlistbox, str, 100);
-					if (lstrcmp(str, ID_Stage[i]) == 0) {
-						nowStage = i;
+				for (int j = 0; j < MAX_HEIGHT; j++) {
+					for (int k = 0; k < MAX_WIDTH; k++) {
+						Maps[nowStage].map[j][k] = GetWindowLongPtr(TileWnd[j][k], 0);
+						Maps[nowStage].cntBox = countBox;
+						Maps[nowStage].cntGoal = countGoal;
 					}
-				}	
+				}
+				nowStage = SendDlgItemMessage(hwnd, ID_LIST, LB_GETCURSEL, 0, 0);
 
 				for (int i = 0; i < MAX_HEIGHT; i++) {
 					for (int j = 0; j < MAX_WIDTH; j++) {
@@ -156,7 +184,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 						InvalidateRect(TileWnd[i][j], NULL, TRUE);
 					}
 				}
-				
+				countBox = Maps[nowStage].cntBox;
+				countGoal = Maps[nowStage].cntGoal;
+				SendMessage(hwnd, MESSAGE_CHANGE, 0, 0);
+
 				break;
 			}
 			break;
@@ -207,18 +238,8 @@ LRESULT CALLBACK TileProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 		SetWindowLongPtr(hwnd, 0, tmp);
 		InvalidateRect(hwnd, NULL, TRUE);
 		
-		countGoal = 0;
-		countBox = 0;
-		for (int i = 0; i < MAX_HEIGHT; i++) {
-			for (int j = 0; j < MAX_WIDTH; j++) {
-				tmp = GetWindowLongPtr(TileWnd[i][j], 0);
-				if (tmp == GOAL) countGoal++;
-				else if (tmp == BOX) countBox++;
-			}
-		}
-
-		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), countBox, countGoal);
-		SetWindowText(hStatic, str);
+		SendMessage(g_hMainWnd, MESSAGE_CHANGE, 0, 0);
+		
 		return 0;
 
 	case WM_PAINT:

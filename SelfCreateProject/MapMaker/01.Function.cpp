@@ -72,7 +72,7 @@ void DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit) {
 /// <summary>
 /// 작성자 : 이승현
 /// 최초 작성일 : 2022.05.17
-/// 최종 수정일 : 2022.05.17
+/// 최종 수정일 : 2022.05.19
 /// 
 /// 현재 설정된 TileWnd들의 정보를 불러와서 구조체에 담는다.
 /// 그리고 파일로 저장한다.
@@ -80,47 +80,45 @@ void DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit) {
 /// </summary>
 /// <param name="temp"></param>
 bool Save() {
-	tag_map tmp[10];
+	tag_map tmp;
 	HANDLE hFile;
 	DWORD dwWrite;
 	TCHAR fileName[100];
-	
-	for (int k = 0; k < Max_stage; k++) {
-		for (int i = 0; i < MAX_HEIGHT; i++) {
-			for (int j = 0; j < MAX_WIDTH; j++) {
-				tmp[k].stage = k + 1;
-				tmp[k].map[i][j] = GetWindowLongPtr(TileWnd[i][j], 0);
-			}
+
+	tmp.cntBox = 0;
+	tmp.cntGoal = 0;
+	tmp.stage = SendDlgItemMessage(g_hMainWnd, ID_LIST, LB_GETCURSEL, 0, 0) + 1;
+
+	for (int i = 0; i < MAX_HEIGHT; i++) {
+		for (int j = 0; j < MAX_WIDTH; j++) {
+			tmp.map[i][j] = GetWindowLongPtr(TileWnd[i][j], 0);
+			if (GetWindowLongPtr(TileWnd[i][j], 0) == BOX) tmp.cntBox++;
+			if (GetWindowLongPtr(TileWnd[i][j], 0) == GOAL) tmp.cntGoal++;
 		}
 	}
 
-	for (int i = 0; i < Max_stage; i++) {
-		wsprintf(fileName, ID_Stage[i]);
-		hFile = CreateFile(fileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-		if (hFile == INVALID_HANDLE_VALUE) {
-			if (MessageBox(g_hMainWnd, TEXT("파일 생성 실패"), TEXT("오류"), MB_OKCANCEL) == IDOK) {
-				if (Save() == true) return true;
-				else return false;
-			}
-			else {
-				return false;
-			}
-		}
-		WriteFile(hFile, &tmp[i], sizeof(tag_map), &dwWrite, NULL);
-		CloseHandle(hFile);
+	wsprintf(fileName, ID_Stage[tmp.stage - 1]);
+	hFile = CreateFile(fileName, GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hFile == INVALID_HANDLE_VALUE) {
+		MessageBox(g_hMainWnd, TEXT("파일 생성 실패"), TEXT("알림"), MB_OK);
+		return false;
 	}
+	WriteFile(hFile, &tmp, sizeof(tag_map), &dwWrite, NULL);
+	CloseHandle(hFile);
+	return true;
 }
 
 /// <summary>
 /// 작성자 : 이승현
 /// 최초 작성일 : 2022년 05월 18일
-/// 최종 수정일 : 2022년 05월 18일
+/// 최종 수정일 : 2022년 05월 19일
 /// 
 /// 내용:
 /// 저장되어있던 맵파일들을 불러와서 메모리에 장착
 /// </summary>
 void Load() {
 	tag_map tmp[Max_stage];
+	tag_map* sub;
 	HANDLE hFile;
 	DWORD dwRead;
 	TCHAR fileName[100];
@@ -128,10 +126,15 @@ void Load() {
 	for(int i = 0; i < Max_stage; i++){
 		wsprintf(fileName, ID_Stage[i]);
 		hFile = CreateFile(fileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-		if (hFile == INVALID_HANDLE_VALUE) 
-			break;
+		if (hFile == INVALID_HANDLE_VALUE) {
+			sub = (tag_map*)calloc(1, sizeof(tag_map));
+			tmp[i] = *sub;
+			free(sub);
+		}
 		ReadFile(hFile, &tmp[i], sizeof(tag_map), &dwRead, NULL);
+		CloseHandle(hFile);
 	}
+
 	for (int i = 0; i < Max_stage; i++) {
 		Maps[i] = tmp[i];
 	}

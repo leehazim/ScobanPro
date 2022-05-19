@@ -6,6 +6,7 @@
 struct tag_map {
 	int map[MAX_HEIGHT][MAX_WIDTH];
 	int stage;
+	int cntBox, cntGoal;
 };
 
 enum tag_Tile { WALL, BOX, MAN, GOAL, WAY };
