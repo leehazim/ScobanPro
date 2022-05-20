@@ -5,19 +5,24 @@ extern const int Max_stage = 10;
 extern HWND TileWnd[MAX_HEIGHT][MAX_WIDTH];
 extern const TCHAR* ID_Stage[Max_stage];
 extern tag_map Maps[Max_stage];
+extern HBITMAP Tiles[5];
+extern HWND hStatic, hListbox;
+extern LPCTSTR lpszTile;
+extern HINSTANCE g_hInst;
 HWND TileTemp[150];
 
 /// <summary>
 /// 작성자 : 이승현
 /// 최초작성일 : 2022. 05.14
-/// 마지막수정일 : 2022.05.22
+/// 마지막수정일 : 2022.05.20
 /// 
+/// 비트맵 경로를 가져오는 공용 대화상자 함수에 포함
 /// 비트맵 경로를 가져와서 DIB비트맵을 DDB비트맵으로 변환
 /// </summary>
 /// <param name="hdc"> 비트맵을 그리고 나서 DDB로 바꾸기 위한 임시 HDC </param>
 /// <param name="Path"> 비트맵파일 경로 </param>
 /// <returns> DDB로 변환된 비트맵 핸들 </returns>
-HBITMAP LoadMyBitmap(HDC hdc, TCHAR* Path) {
+void LoadMyBitmap(HWND hwnd) {
 
 	HANDLE hFile;
 	DWORD FileSize, dwRead;
@@ -25,18 +30,36 @@ HBITMAP LoadMyBitmap(HDC hdc, TCHAR* Path) {
 	HBITMAP hBit;
 	PVOID ih;
 
-	hFile = CreateFile(Path, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hFile == INVALID_HANDLE_VALUE) 
-		return NULL;
-	FileSize = GetFileSize(hFile, NULL);
-	fh = (BITMAPFILEHEADER*)malloc(FileSize);
-	ReadFile(hFile, fh, FileSize, &dwRead, NULL);
-	CloseHandle(hFile);
+	OPENFILENAME OFN;
+	TCHAR lpszStr[MAX_PATH] = TEXT("");
+	HDC hdc;
 
-	ih = ((PBYTE)fh + sizeof(BITMAPFILEHEADER));
-	hBit = CreateDIBitmap(hdc, (BITMAPINFOHEADER*)ih, CBM_INIT, (PBYTE)fh + fh->bfOffBits, (BITMAPINFO*)ih, DIB_RGB_COLORS);
-	free(fh);
-	return hBit;
+	memset(&OFN, 0, sizeof(OPENFILENAME));
+	OFN.lStructSize = sizeof(OPENFILENAME);
+	OFN.hwndOwner = hwnd;
+	OFN.lpstrFile = lpszStr;
+	OFN.lpstrFilter = TEXT("Bitmap File(*bmp)\0*.bmp\0");
+	OFN.nMaxFile = MAX_PATH;
+
+	for (int i = 0; i < COUNT_BITMAP; i++) {
+		if (GetOpenFileName(&OFN) != 0) {
+			hdc = GetDC(hwnd);
+
+			hFile = CreateFile(lpszStr, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+			if (hFile == INVALID_HANDLE_VALUE)
+				return;
+			FileSize = GetFileSize(hFile, NULL);
+			fh = (BITMAPFILEHEADER*)malloc(FileSize);
+			ReadFile(hFile, fh, FileSize, &dwRead, NULL);
+			CloseHandle(hFile);
+
+			ih = ((PBYTE)fh + sizeof(BITMAPFILEHEADER));
+			hBit = CreateDIBitmap(hdc, (BITMAPINFOHEADER*)ih, CBM_INIT, (PBYTE)fh + fh->bfOffBits, (BITMAPINFO*)ih, DIB_RGB_COLORS);
+			Tiles[i] = hBit;
+			free(fh);
+			ReleaseDC(hwnd, hdc);
+		}
+	}
 }
 
 /// <summary>
@@ -138,4 +161,19 @@ void Load() {
 	for (int i = 0; i < Max_stage; i++) {
 		Maps[i] = tmp[i];
 	}
+}
+
+void CreateChild(HWND hwnd) {
+	for (int i = 0; i < MAX_HEIGHT; i++) {
+		for (int j = 0; j < MAX_WIDTH; j++) {
+			TileWnd[i][j] = CreateWindow(lpszTile, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
+										 j * 32, i * 32, 32, 32, hwnd, (HMENU)NULL, g_hInst, NULL);
+		}
+	}
+
+	hStatic = CreateWindow(TEXT("static"), NULL, WS_CHILD | WS_VISIBLE,
+						   10, MAX_HEIGHT * 32 + 10, 200, 25, hwnd, (HMENU)0, g_hInst, NULL);
+	hListbox = CreateWindow(TEXT("listbox"), NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | LBS_NOTIFY,
+							400, 10, 100, 300, hwnd, (HMENU)ID_LIST, g_hInst, NULL);
+
 }

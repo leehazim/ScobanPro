@@ -10,6 +10,7 @@
 #define IDB_MAN                         103
 #define IDB_BITMAP4                     104
 #define IDB_GOAL						104
+#define ID_BTN_SAVE						105
 
 #define MESSAGE_START					WM_USER+2	
 #define MESSAGE_RESTART					WM_USER+3

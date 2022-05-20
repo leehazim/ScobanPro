@@ -10,7 +10,7 @@ HWND TileWnd[MAX_HEIGHT][MAX_WIDTH];
 HINSTANCE g_hInst;
 HWND g_hMainWnd;
 HWND hStatic;
-HWND hlistbox;
+HWND hListbox;
 
 // Child윈도우들의 정보들 담아두기위한 변수들
 HBITMAP Tiles[5];
@@ -89,9 +89,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 /// </summary>
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
 
-	OPENFILENAME OFN;
-	TCHAR lpszStr[MAX_PATH] = TEXT("");
-	DWORD dwRead;
 	HDC hdc; PAINTSTRUCT ps;
 	TCHAR str[128];
 	int tmp;
@@ -99,45 +96,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	switch (iMessage) {
 	case WM_CREATE:
 		g_hMainWnd = hwnd;
-		memset(&OFN, 0, sizeof(OPENFILENAME));
-		OFN.lStructSize = sizeof(OPENFILENAME);
-		OFN.hwndOwner = hwnd;
-		OFN.lpstrFile = lpszStr;
-		OFN.lpstrFilter = TEXT("Bitmap File(*bmp)\0*.bmp\0");
-		OFN.nMaxFile = MAX_PATH;
-		for (int i = 0; i < COUNT_BITMAP; i++) {
-			if (GetOpenFileName(&OFN) != 0) {
-				hdc = GetDC(hwnd);
-				Tiles[i] = LoadMyBitmap(hdc, lpszStr);
-				ReleaseDC(hwnd, hdc);
-			}
-		}
-	
-		for (int i = 0; i < MAX_HEIGHT; i++) {
-			for (int j = 0; j < MAX_WIDTH; j++) {
-				TileWnd[i][j] = CreateWindow(lpszTile, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
-											 j * 32, i * 32, 32, 32, hwnd, (HMENU)NULL, g_hInst, NULL);
-			}
-		}
-		hStatic = CreateWindow(TEXT("static"), str, WS_CHILD | WS_VISIBLE,
-							   10, MAX_HEIGHT * 32 + 10, 200, 25, hwnd, (HMENU)0, g_hInst, NULL);
-		hlistbox = CreateWindow(TEXT("listbox"), NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | LBS_NOTIFY,
-								 400, 10, 100, 300, hwnd, (HMENU)ID_LIST, g_hInst, NULL);
-	
+		LoadMyBitmap(hwnd);
+		CreateChild(hwnd);
 		for (int i = 0; i < Max_stage; i++) {
-			SendMessage(hlistbox, LB_ADDSTRING, 0, (LPARAM)ID_Stage[i]);
+			SendMessage(hListbox, LB_ADDSTRING, 0, (LPARAM)ID_Stage[i]);
 		}
-
 		Load();
-		nowStage = 0;
 		for (int j = 0; j < MAX_HEIGHT; j++) {
 			for (int k = 0; k < MAX_WIDTH; k++) {
 				SetWindowLongPtr(TileWnd[j][k], 0, Maps[nowStage].map[j][k]);
 			}
 		}
 		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), Maps[nowStage].cntBox, Maps[nowStage].cntGoal);
-
-		SendMessage(hlistbox, LB_SETCURSEL, 0, 0);
+		SetWindowText(hStatic, str);
+		
+		SendMessage(hListbox, LB_SETCURSEL, 0, 0);
 		
 		return 0;
 

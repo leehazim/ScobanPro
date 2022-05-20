@@ -14,7 +14,8 @@ enum tag_Tile { WALL, BOX, MAN, GOAL, WAY };
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK TileProc(HWND, UINT, WPARAM, LPARAM);
 
-HBITMAP LoadMyBitmap(HDC hdc, TCHAR* Path);
+void LoadMyBitmap(HWND hwnd);
 void DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit);
 bool Save();
 void Load();
+void CreateChild(HWND hwnd);
