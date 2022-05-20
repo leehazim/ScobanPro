@@ -1,6 +1,1 @@
-﻿  01.Function.cpp
-  main.cpp
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\main.cpp(94,8): warning C4101: 'dwRead' :참조되지 않은 지역 변수입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\main.cpp(222,8): warning C4101: 'str' :참조되지 않은 지역 변수입니다.
-  코드를 생성하고 있습니다...
-  MapMaker.vcxproj -> C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Debug\MapMaker.exe
+﻿  MapMaker.vcxproj -> D:\Github\ScobanPro\SelfCreateProject\Debug\MapMaker.exe

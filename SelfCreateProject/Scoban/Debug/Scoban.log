@@ -1,5 +1,5 @@
 ﻿  main.cpp
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Scoban\main.cpp(73,9): warning C4101: 'bit' :참조되지 않은 지역 변수입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Scoban\main.cpp(72,9): warning C4101: 'y' :참조되지 않은 지역 변수입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Scoban\main.cpp(72,6): warning C4101: 'x' :참조되지 않은 지역 변수입니다.
-  Scoban.vcxproj -> C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Debug\Scoban.exe
+D:\Github\ScobanPro\SelfCreateProject\Scoban\main.cpp(73,9): warning C4101: 'bit' :참조되지 않은 지역 변수입니다.
+D:\Github\ScobanPro\SelfCreateProject\Scoban\main.cpp(72,9): warning C4101: 'y' :참조되지 않은 지역 변수입니다.
+D:\Github\ScobanPro\SelfCreateProject\Scoban\main.cpp(72,6): warning C4101: 'x' :참조되지 않은 지역 변수입니다.
+  Scoban.vcxproj -> D:\Github\ScobanPro\SelfCreateProject\Debug\Scoban.exe

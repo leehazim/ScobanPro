@@ -85,7 +85,7 @@ void LoadMap() {
 	TCHAR FileName[100];
 
 	for (int i = 0; i < Max_stage; i++) {
-		wsprintf(FileName, TEXT("stage%d"), i);
+		wsprintf(FileName, TEXT("stage%d"), i+1);
 		hFile = CreateFile(FileName, GENERIC_READ, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (hFile == INVALID_HANDLE_VALUE) {
 			MessageBox(g_hWnd, TEXT("파일 열기 실패"), TEXT("알림"), MB_OK);

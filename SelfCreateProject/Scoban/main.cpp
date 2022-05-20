@@ -92,13 +92,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	case MESSAGE_RESTART:
-		if (MessageBox(hwnd, TEXT("클리어! 다시시작하겠습니까?"), TEXT("알림"), MB_OKCANCEL) == IDOK)
+		if (MessageBox(hwnd, TEXT("클리어! 다시시작하겠습니까?"), TEXT("알림"), MB_OKCANCEL) == IDOK) {
+			NowStage++;
 			SendMessage(hwnd, MESSAGE_START, 0, 0);
+		}
 		return 0;
 
 	case MESSAGE_START:
-		NowStage++;
-		if (NowStage > Max_stage) {
+		if (NowStage >= Max_stage) {
 			if (MessageBox(hwnd, TEXT("모든 스테이지를 클리어했습니다. 처음부터 다시해보시겠습니까?"), TEXT("알림"), MB_OKCANCEL) == IDOK)
 				NowStage = 0;
 			else
