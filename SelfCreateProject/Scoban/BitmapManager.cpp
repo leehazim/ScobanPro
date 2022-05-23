@@ -3,11 +3,11 @@
 const int BitmapManager::Max_Cnt_Tile = 5;
 
 BitmapManager::BitmapManager() {
-	m_Tile = new HBITMAP[5];
+	
 }
 
 BitmapManager::~BitmapManager() {
-	delete[] m_Tile;
+
 }
 
 void BitmapManager::DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit) {
@@ -30,7 +30,7 @@ void BitmapManager::LoadBitFile(HWND hwnd) {
 
 	for (int i = 0; i < Max_Cnt_Tile - 1; i++) {
 		hdc = GetDC(hwnd);
-		wsprintf(str, L"C:\\Users\\User\\Documents\\GitHub\\ScobanPro\\SelfCreateProject\\Asset\\Bitmap%d", i + 1);
+		wsprintf(str, L"D:\\Github\\ScobanPro\\SelfCreateProject\\Asset\\Bitmap%d", i + 1);
 		hFile = CreateFile(str, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (hFile == INVALID_HANDLE_VALUE) MessageBox(hwnd, L"파일 열기 실패", L"오류", MB_OK);
 		FileSize = GetFileSize(hFile, NULL);
@@ -44,4 +44,9 @@ void BitmapManager::LoadBitFile(HWND hwnd) {
 		free(fh);
 		ReleaseDC(hwnd, hdc);
 	}
+	m_Tile[4] = NULL;
+}
+
+HBITMAP BitmapManager::GetTile(int idx) {
+	return m_Tile[idx];
 }

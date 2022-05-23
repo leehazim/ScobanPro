@@ -1,16 +1,28 @@
 #include "MainWindow.h"
 
 MainWindow* MainWindow::_Instance;
+BitmapManager* MainWindow::Bit_Instance;
 
 MainWindow::MainWindow() {}
 MainWindow::MainWindow(HINSTANCE hInstance) 
-	: BaseWindow(hInstance), lpszClass(L"MainWindow") {}
+	: BaseWindow(hInstance), lpszClass(L"MainWindow") {
+}
 
 LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
-	
+	HDC hdc; PAINTSTRUCT ps;
 	switch (iMessage) {
 	case WM_CREATE:
 		SetWindowPos(hwnd, NULL, 0, 0, 800, 640, SWP_NOMOVE);
+		InitBitManager();
+		Bit_Instance->LoadBitFile(hwnd);
+		return 0;
+
+	case WM_PAINT:
+		hdc = BeginPaint(hwnd, &ps);
+		for (int i = 0; i < BitmapManager::Max_Cnt_Tile - 1; i++) {
+			Bit_Instance->DrawBitmap(hdc, i * 32, 10, Bit_Instance->GetTile(i));
+		}
+		EndPaint(hwnd, &ps);
 		return 0;
 
 	case WM_DESTROY:
@@ -18,6 +30,10 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		return 0;
 	}
 	return DefWindowProc(hwnd, iMessage, wParam, lParam);
+}
+
+void MainWindow::InitBitManager() {
+	Bit_Instance = new BitmapManager();
 }
 
 bool MainWindow::InitWindow() {

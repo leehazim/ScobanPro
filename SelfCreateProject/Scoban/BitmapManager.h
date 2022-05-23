@@ -1,15 +1,17 @@
 #pragma once
 #include <windows.h>
 class BitmapManager {
-private:
+public:
 	static const int Max_Cnt_Tile;
 
-	HBITMAP* m_Tile;
-	HBITMAP m_Buffer;
-	
 public:
 	BitmapManager();
 	~BitmapManager();
 	void DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit);
 	void LoadBitFile(HWND hwnd);
+	HBITMAP GetTile(int idx);
+
+private:
+	HBITMAP m_Tile[5];
+	HBITMAP m_Buffer;
 };
