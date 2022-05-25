@@ -10,6 +10,8 @@ public:
 	BaseWindow();
 	BaseWindow(HINSTANCE hInstance);
 	virtual ~BaseWindow();
+
+	void SetInstance(HINSTANCE hInstance);
 	HINSTANCE GetInstance();
 	HWND GetHandleWnd();
 

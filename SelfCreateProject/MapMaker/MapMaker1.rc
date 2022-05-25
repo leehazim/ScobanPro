@@ -59,6 +59,20 @@ BEGIN
     END
 END
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP                  "C:\\Users\\User\\Documents\\GitHub\\ScobanPro\\SelfCreateProject\\Asset\\bitmap1.bmp"
+
+IDB_BITMAP2             BITMAP                  "C:\\Users\\User\\Documents\\GitHub\\ScobanPro\\SelfCreateProject\\Asset\\bitmap2.bmp"
+
+IDB_BITMAP3             BITMAP                  "C:\\Users\\User\\Documents\\GitHub\\ScobanPro\\SelfCreateProject\\Asset\\bitmap3.bmp"
+
+IDB_BITMAP4             BITMAP                  "C:\\Users\\User\\Documents\\GitHub\\ScobanPro\\SelfCreateProject\\Asset\\bitmap4.bmp"
+
 #endif    // 한국어(대한민국) resources
 /////////////////////////////////////////////////////////////////////////////
 

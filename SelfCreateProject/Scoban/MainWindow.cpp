@@ -3,10 +3,11 @@
 MainWindow* MainWindow::_Instance;
 BitmapManager* MainWindow::Bit_Instance;
 
-MainWindow::MainWindow() {}
+MainWindow::MainWindow() 
+	: BaseWindow(nullptr), lpszClass(L"MainWindow") {}
+
 MainWindow::MainWindow(HINSTANCE hInstance) 
-	: BaseWindow(hInstance), lpszClass(L"MainWindow") {
-}
+	: BaseWindow(hInstance), lpszClass(L"MainWindow") {}
 
 LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
 	HDC hdc; PAINTSTRUCT ps;
@@ -44,10 +45,9 @@ bool MainWindow::InitWindow() {
 	m_hWnd = CreateWindow(lpszClass, L"Scoban", WS_OVERLAPPEDWINDOW,
 						  CW_USEDEFAULT, CW_USEDEFAULT,
 						  0, 0, NULL, (HMENU)NULL, m_hInst, NULL);
-	if (m_hWnd == NULL) {
+	if (m_hWnd == NULL) 
 		return false;
-	}
-
+	
 	return true;
 }
 
@@ -55,8 +55,8 @@ void MainWindow::Active(int nCmdShow) {
 	ShowWindow(m_hWnd, nCmdShow);
 }
 
-MainWindow* MainWindow::GetInstance(HINSTANCE hInstance) {
-	if (_Instance == nullptr) 
-		_Instance= new MainWindow(hInstance);
+MainWindow* MainWindow::GetSingleInstance() {
+	if (_Instance == nullptr)
+		_Instance = new MainWindow();
 	return _Instance;
 }

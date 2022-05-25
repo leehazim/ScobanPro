@@ -20,6 +20,10 @@ BaseWindow::BaseWindow(HINSTANCE hInstance)
 
 BaseWindow::~BaseWindow() {}
 
+void BaseWindow::SetInstance(HINSTANCE hInstance) {
+	m_hInst = hInstance;
+}
+
 HINSTANCE BaseWindow::GetInstance() {
 	return m_hInst;
 }
