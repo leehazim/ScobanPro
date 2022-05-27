@@ -9,6 +9,10 @@ MainWindow::MainWindow()
 MainWindow::MainWindow(HINSTANCE hInstance) 
 	: BaseWindow(hInstance), lpszClass(L"MainWindow") {}
 
+MainWindow::~MainWindow() {
+	delete Bit_Instance;
+}
+
 LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
 	HDC hdc; PAINTSTRUCT ps;
 	switch (iMessage) {
@@ -59,4 +63,8 @@ MainWindow* MainWindow::GetSingleInstance() {
 	if (_Instance == nullptr)
 		_Instance = new MainWindow();
 	return _Instance;
+}
+
+BitmapManager* MainWindow::GetBitmapManager() {
+	return Bit_Instance;
 }

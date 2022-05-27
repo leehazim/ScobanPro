@@ -23,7 +23,8 @@ void BitmapManager::DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit) {
 
 void BitmapManager::LoadBitFile(HWND hwnd) {
 	for (int i = 0; i < Max_Cnt_Tile - 1; i++) 
-		m_Tile[i] = LoadBitmap(MainWindow::GetSingleInstance()->GetInstance(), MAKEINTRESOURCE(IDB_BITMAP1+i));
+		m_Tile[i] = LoadBitmap(MainWindow::GetSingleInstance()->GetInstance(),
+							   MAKEINTRESOURCE(IDB_BITMAP1+i));
 	
 }
 

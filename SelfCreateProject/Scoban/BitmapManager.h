@@ -6,6 +6,7 @@ public:
 	static const int Max_Cnt_Tile;
 
 public:
+	enum tag_tile { WALL, BOX, MAN, GOAL, WAY };
 	BitmapManager();
 	~BitmapManager();
 
