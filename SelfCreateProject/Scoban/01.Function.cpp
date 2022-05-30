@@ -143,7 +143,6 @@ void Render(HDC hdc) {
 	HBITMAP OldBitmap;
 	RECT rt;
 
-	/* 더블버퍼링을 위해서 메모리DC에 먼저그린다음에 빠른 복사를 위한 코딩 구조*/
 	MemDC = CreateCompatibleDC(hdc);
 	GetClientRect(g_hWnd, &rt);
 	if (hBit == NULL) hBit = CreateCompatibleBitmap(hdc, rt.right, rt.bottom);

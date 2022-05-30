@@ -2,6 +2,7 @@
 
 MainWindow* MainWindow::_Instance;
 BitmapManager* MainWindow::Bit_Instance;
+GameManager* MainWindow::Game_Instance;
 
 MainWindow::MainWindow() 
 	: BaseWindow(nullptr), lpszClass(L"MainWindow") {}
@@ -19,15 +20,23 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 	case WM_CREATE:
 		SetWindowPos(hwnd, NULL, 0, 0, 800, 640, SWP_NOMOVE);
 		InitBitManager();
+		InitGameManager();
 		Bit_Instance->LoadBitFile(hwnd);
+		SetTimer(hwnd, 1, 100, NULL);
+		return 0;
+
+	case WM_TIMER:
+		InvalidateRect(hwnd, NULL, TRUE);
 		return 0;
 
 	case WM_PAINT:
 		hdc = BeginPaint(hwnd, &ps);
-		for (int i = 0; i < BitmapManager::Max_Cnt_Tile - 1; i++) {
-			Bit_Instance->DrawBitmap(hdc, i * 32, 10, Bit_Instance->GetTile(i));
-		}
+		Game_Instance->Render(hdc);
 		EndPaint(hwnd, &ps);
+		return 0;
+
+	case WM_KEYDOWN:
+		Game_Instance->Move(wParam);
 		return 0;
 
 	case WM_DESTROY:
@@ -39,6 +48,10 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 
 void MainWindow::InitBitManager() {
 	Bit_Instance = new BitmapManager();
+}
+
+void MainWindow::InitGameManager() {
+	Game_Instance = new GameManager();
 }
 
 bool MainWindow::InitWindow() {
@@ -67,4 +80,8 @@ MainWindow* MainWindow::GetSingleInstance() {
 
 BitmapManager* MainWindow::GetBitmapManager() {
 	return Bit_Instance;
+}
+
+GameManager* MainWindow::GetGameInstance() {
+	return Game_Instance;
 }

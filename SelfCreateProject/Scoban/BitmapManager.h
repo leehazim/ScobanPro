@@ -1,5 +1,6 @@
 #pragma once
 #include <windows.h>
+
 class MainWindow;
 class BitmapManager {
 public:
@@ -7,6 +8,7 @@ public:
 
 public:
 	enum tag_tile { WALL, BOX, MAN, GOAL, WAY };
+	HBITMAP m_Tile[5];
 	BitmapManager();
 	~BitmapManager();
 
@@ -15,6 +17,5 @@ public:
 	HBITMAP GetTile(int idx);
 
 private:
-	HBITMAP m_Tile[5];
 	HBITMAP m_Buffer;
 };

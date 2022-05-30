@@ -1,8 +1,6 @@
 #pragma once
-#include<windows.h>
 #include "BitmapManager.h"
 
-class MainWindow;
 class GameManager {
 private:
 	static const int Max_Width = 10;
