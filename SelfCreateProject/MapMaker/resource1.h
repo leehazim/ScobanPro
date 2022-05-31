@@ -16,6 +16,7 @@
 #define ID_LIST                         1001
 #define ID_SAVE                         40003
 #define ID_LOAD                         40004
+#define MESSAGE_CHANGE					WM_USER  +10
 
 // Next default values for new objects
 // 

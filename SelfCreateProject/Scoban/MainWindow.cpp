@@ -22,11 +22,18 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		InitBitManager();
 		InitGameManager();
 		Bit_Instance->LoadBitFile(hwnd);
-		SetTimer(hwnd, 1, 100, NULL);
+		Game_Instance->LoadMap();
+		SetTimer(hwnd, 1, 10, NULL);
 		return 0;
 
 	case WM_TIMER:
-		InvalidateRect(hwnd, NULL, TRUE);
+		if (Game_Instance->CheckClear()) {
+			KillTimer(hwnd, 1);
+			if (MessageBox(hwnd, L"클리어!\n 다음스테이지로 이동합니다.", L"축하합니다!", MB_OKCANCEL) == IDOK) {
+				//Game_Instance->GetStage()++;
+				SetTimer(hwnd, 1, 10, NULL);
+			}
+		}
 		return 0;
 
 	case WM_PAINT:
@@ -36,6 +43,10 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		return 0;
 
 	case WM_KEYDOWN:
+		switch (wParam) {
+		case 'S':
+			Game_Instance->InitStage();
+		}
 		Game_Instance->Move(wParam);
 		return 0;
 
