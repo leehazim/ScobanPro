@@ -1,5 +1,6 @@
 #pragma once
 #include <windows.h>
+#include "resource.h"
 
 class MainWindow;
 class BitmapManager {

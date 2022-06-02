@@ -23,15 +23,15 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		InitGameManager();
 		Bit_Instance->LoadBitFile(hwnd);
 		Game_Instance->LoadMap();
-		SetTimer(hwnd, 1, 10, NULL);
 		return 0;
 
 	case WM_TIMER:
 		if (Game_Instance->CheckClear()) {
 			KillTimer(hwnd, 1);
 			if (MessageBox(hwnd, L"클리어!\n 다음스테이지로 이동합니다.", L"축하합니다!", MB_OKCANCEL) == IDOK) {
-				//Game_Instance->GetStage()++;
-				SetTimer(hwnd, 1, 10, NULL);
+				if (Game_Instance->SetStage(Game_Instance->GetStage() + 1))
+					return 0;
+				SendMessage(hwnd, MESSAGE_START, 0, 0);
 			}
 		}
 		return 0;
@@ -42,10 +42,15 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		EndPaint(hwnd, &ps);
 		return 0;
 
+	case MESSAGE_START:
+		Game_Instance->InitStage();
+		SetTimer(hwnd, 1, 10, NULL);
+		return 0;
+
 	case WM_KEYDOWN:
 		switch (wParam) {
 		case 'S':
-			Game_Instance->InitStage();
+			SendMessage(hwnd, MESSAGE_START, 0, 0);
 		}
 		Game_Instance->Move(wParam);
 		return 0;

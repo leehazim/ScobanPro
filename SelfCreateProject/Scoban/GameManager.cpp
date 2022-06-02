@@ -79,7 +79,16 @@ void GameManager::Move(int Key) {
 }
 
 bool GameManager::CheckClear() {
-	return false;
+	it = Maps.begin();
+	for (int i = 1; i < nowStage; i++) it++;
+	for (int i = 0; i < Max_Height; i++) {
+		for (int j = 0; j < Max_Width; j++) {
+			if (it->Map[i][j] == BitmapManager::tag_tile::GOAL && MemMap[i][j] != BitmapManager::tag_tile::BOX) {
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 void GameManager::Render(HDC hdc) {
@@ -126,4 +135,18 @@ void GameManager::LoadMap() {
 
 int& GameManager::GetStage() {
 	return nowStage;
+}
+
+bool GameManager::SetStage(int stage) {
+	if (stage > Max_Stage) {
+		if (MessageBox(MainWindow::GetSingleInstance()->GetHandleWnd(), L"모든 스테이지 클리어\n 처음부터 다시 하시겠습니까?", L"알림", MB_OKCANCEL) == IDOK) {
+			nowStage = 1;
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	nowStage = stage;
+	return false;
 }

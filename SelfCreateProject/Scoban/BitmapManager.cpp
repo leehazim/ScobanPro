@@ -1,6 +1,5 @@
 #include "BitmapManager.h"
 #include "MainWindow.h"
-#include "resource.h"
 const int BitmapManager::Max_Cnt_Tile = 5;
 
 BitmapManager::BitmapManager() {

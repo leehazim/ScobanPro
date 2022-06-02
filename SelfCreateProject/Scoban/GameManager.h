@@ -27,6 +27,7 @@ public:
 	GameManager();
 	~GameManager();
 	
+	bool SetStage(int stage);
 	int& GetStage();
 	void InitStage();
 	void Move(int Key);
