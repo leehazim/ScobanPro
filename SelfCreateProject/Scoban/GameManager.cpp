@@ -4,8 +4,12 @@ const int GameManager::Max_Width;
 const int GameManager::Max_Height;
 const int GameManager::Max_Stage;
 
-GameManager::GameManager()
-	: px(-1), py(-1), nowStage(1), hBit(nullptr) {
+GameManager::GameManager():
+	px(-1),
+	py(-1),
+	nowStage(1),
+	MoveCnt(0),
+	hBit(nullptr) {
 	BitDrawer = MainWindow::GetSingleInstance()->GetBitmapManager();
 }
 
@@ -16,7 +20,8 @@ GameManager::~GameManager() {
 void GameManager::InitStage() {
 	it = Maps.begin();
 	for (int i = 1; i < nowStage; i++) it++;
-
+	MoveCnt = 0;
+	
 	for (int i = 0; i < Max_Height; i++) {
 		for (int j = 0; j < Max_Width; j++) {
 			MemMap[i][j] = it->Map[i][j];
@@ -73,6 +78,7 @@ void GameManager::Move(int Key) {
 	else { /* 이동하려는 곳이 벽인 경우 이동 불가*/
 		dx = dy = 0;
 	}
+	if (dx != 0 || dy != 0) MoveCnt++;
 	px += dx;
 	py += dy;
 	InvalidateRect(MainWindow::GetSingleInstance()->GetHandleWnd(), NULL, FALSE);
@@ -96,6 +102,7 @@ void GameManager::Render(HDC hdc) {
 	HBITMAP OldBitmap;
 	RECT rt;
 	BITMAP bit;
+	TCHAR str[258];
 	
 	GetClientRect(MainWindow::GetSingleInstance()->GetHandleWnd(), &rt);
 	MemDC = CreateCompatibleDC(hdc);
@@ -111,7 +118,15 @@ void GameManager::Render(HDC hdc) {
 		}
 	}
 	
+	wsprintf(str, L"게임시작 : R");
+	TextOut(MemDC, 400, 10, str, lstrlen(str));
+	wsprintf(str, L"이동 : 방향키");
+	TextOut(MemDC, 400, 50, str, lstrlen(str));
+	wsprintf(str, L"이동횟수 : %d", MoveCnt);
+	TextOut(MemDC, 400, 90, str, lstrlen(str));
 	BitBlt(hdc, 0, 0, rt.right - rt.left, rt.bottom - rt.top, MemDC, 0, 0, SRCCOPY);
+
+	
 	SelectObject(MemDC, OldBitmap);
 	DeleteDC(MemDC);
 }

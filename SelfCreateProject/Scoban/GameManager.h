@@ -20,6 +20,7 @@ private:
 	int MemMap[Max_Height][Max_Width];
 	int nowStage;
 	int px, py;
+	int MoveCnt;
 
 	BitmapManager* BitDrawer;
 

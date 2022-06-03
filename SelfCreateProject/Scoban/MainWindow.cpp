@@ -49,7 +49,7 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 
 	case WM_KEYDOWN:
 		switch (wParam) {
-		case 'S':
+		case 'R':
 			SendMessage(hwnd, MESSAGE_START, 0, 0);
 		}
 		Game_Instance->Move(wParam);
