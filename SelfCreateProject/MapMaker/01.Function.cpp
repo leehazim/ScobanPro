@@ -177,3 +177,45 @@ void CreateChild(HWND hwnd) {
 							400, 10, 100, 300, hwnd, (HMENU)ID_LIST, g_hInst, NULL);
 
 }
+
+int CreateSelect(HWND hwnd) {
+	CreateWindow(L"button", L"WALL", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON | WS_GROUP,
+				 400, 400, 100, 30, hwnd, (HMENU)ID_BTN_WALL, g_hInst, NULL);
+	CreateWindow(L"button", L"BOX", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+				 400, 430, 100, 30, hwnd, (HMENU)ID_BTN_BOX, g_hInst, NULL);
+	CreateWindow(L"button", L"MAN", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+				 400, 460, 100, 30, hwnd, (HMENU)ID_BTN_MAN, g_hInst, NULL);
+	CreateWindow(L"button", L"GOAL", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+				 400, 490, 100, 30, hwnd, (HMENU)ID_BTN_GOAL, g_hInst, NULL);
+	CreateWindow(L"button", L"WAY", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+				 400, 520, 100, 30, hwnd, (HMENU)ID_BTN_WAY, g_hInst, NULL);
+	CheckRadioButton(hwnd, ID_BTN_WALL, ID_BTN_WAY, ID_BTN_WALL);
+	return 0;
+}
+
+int ChangeSelect(WORD param) {
+	int tmp = 0;
+	switch (param) {
+	case ID_BTN_WALL:
+		tmp = 0;
+		CheckRadioButton(g_hMainWnd, ID_BTN_WALL, ID_BTN_WAY, ID_BTN_WALL);
+		break;
+	case ID_BTN_BOX:
+		tmp = 1;
+		CheckRadioButton(g_hMainWnd, ID_BTN_WALL, ID_BTN_WAY, ID_BTN_BOX);
+		break;
+	case ID_BTN_MAN:
+		tmp = 2;
+		CheckRadioButton(g_hMainWnd, ID_BTN_WALL, ID_BTN_WAY, ID_BTN_MAN);
+		break;
+	case ID_BTN_GOAL:
+		tmp = 3;
+		CheckRadioButton(g_hMainWnd, ID_BTN_WALL, ID_BTN_WAY, ID_BTN_GOAL);
+		break;
+	case ID_BTN_WAY:
+		tmp = 4;
+		CheckRadioButton(g_hMainWnd, ID_BTN_WALL, ID_BTN_WAY, ID_BTN_WAY);
+		break;
+	}
+	return tmp;
+}

@@ -18,6 +18,7 @@ int countBox = 0;
 int countGoal = 0;
 int countStage = 0;
 int nowStage = 0;
+int selectTile;
 
 const int Max_stage = 10;
 tag_map Maps[Max_stage];
@@ -98,6 +99,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		g_hMainWnd = hwnd;
 		LoadMyBitmap(hwnd);
 		CreateChild(hwnd);
+		selectTile = CreateSelect(hwnd);
 		for (int i = 0; i < Max_stage; i++) {
 			SendMessage(hListbox, LB_ADDSTRING, 0, (LPARAM)ID_Stage[i]);
 		}
@@ -137,6 +139,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 		case ID_LOAD:
 			Load();
+			break;
+
+		case ID_BTN_WALL:
+		case ID_BTN_BOX: 
+		case ID_BTN_MAN:
+		case ID_BTN_GOAL:
+		case ID_BTN_WAY:
+			selectTile = ChangeSelect(LOWORD(wParam));
 			break;
 
 		case ID_LIST:
@@ -199,16 +209,8 @@ LRESULT CALLBACK TileProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 		SetWindowLongPtr(hwnd, 0, WALL);
 		return 0;
 
-	case MESSAGE_CHANGE:
-		SetWindowLongPtr(hwnd, 0, lParam);
-		InvalidateRect(hwnd, NULL, TRUE);
-		return 0;
-
 	case WM_LBUTTONDOWN:
-		tmp = GetWindowLongPtr(hwnd, 0);
-		tmp++;
-		if (tmp > WAY) tmp = WALL;
-		SetWindowLongPtr(hwnd, 0, tmp);
+		SetWindowLongPtr(hwnd, 0, selectTile);
 		InvalidateRect(hwnd, NULL, TRUE);
 		
 		SendMessage(g_hMainWnd, MESSAGE_CHANGE, 0, 0);

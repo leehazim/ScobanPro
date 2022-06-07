@@ -19,3 +19,5 @@ void DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit);
 bool Save();
 void Load();
 void CreateChild(HWND hwnd);
+int CreateSelect(HWND hwnd);
+int ChangeSelect(WORD param);
