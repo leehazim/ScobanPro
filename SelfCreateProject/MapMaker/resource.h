@@ -15,11 +15,6 @@
 #define MESSAGE_STATICPAINT WM_USER + 1
 #define MAX_TILE 150
 
-struct tag_map {
-	int map[MAX_HEIGHT][MAX_WIDTH];
-	int stage;
-};
-
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

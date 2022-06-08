@@ -23,8 +23,10 @@ HWND TileTemp[150];
 /// <param name="Path"> 비트맵파일 경로 </param>
 /// <returns> DDB로 변환된 비트맵 핸들 </returns>
 void LoadMyBitmap(HWND hwnd) {
-
-	HANDLE hFile;
+	for (int i = 0; i < 4; i++)
+		Tiles[i] = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP1 + i));
+	Tiles[4] = nullptr;
+	/*HANDLE hFile;
 	DWORD FileSize, dwRead;
 	BITMAPFILEHEADER* fh;
 	HBITMAP hBit;
@@ -59,7 +61,7 @@ void LoadMyBitmap(HWND hwnd) {
 			free(fh);
 			ReleaseDC(hwnd, hdc);
 		}
-	}
+	}*/
 }
 
 /// <summary>
@@ -120,7 +122,7 @@ bool Save() {
 		}
 	}
 
-	wsprintf(fileName, ID_Stage[tmp.stage - 1]);
+	wsprintf(fileName, L"C:\\%s", ID_Stage[tmp.stage - 1]);
 	hFile = CreateFile(fileName, GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hFile == INVALID_HANDLE_VALUE) {
 		MessageBox(g_hMainWnd, TEXT("파일 생성 실패"), TEXT("알림"), MB_OK);
@@ -147,7 +149,7 @@ void Load() {
 	TCHAR fileName[100];
 
 	for(int i = 0; i < Max_stage; i++){
-		wsprintf(fileName, ID_Stage[i]);
+		wsprintf(fileName, L"C:\\%s", ID_Stage[i]);
 		hFile = CreateFile(fileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (hFile == INVALID_HANDLE_VALUE) {
 			sub = (tag_map*)calloc(1, sizeof(tag_map));

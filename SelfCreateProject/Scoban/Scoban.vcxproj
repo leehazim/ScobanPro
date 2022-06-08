@@ -169,6 +169,8 @@
     <ResourceCompile Include="Scoban.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\Asset\bitmap1.bmp" />
+    <Image Include="..\Asset\bitmap2.bmp" />
     <Image Include="bitmap1.bmp" />
     <Image Include="bitmap2.bmp" />
     <Image Include="bitmap3.bmp" />

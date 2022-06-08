@@ -29,6 +29,7 @@
 
 #define MESSAGE_CHANGE					WM_USER  +10
 
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

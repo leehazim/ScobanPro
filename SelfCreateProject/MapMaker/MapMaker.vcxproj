@@ -141,9 +141,11 @@
   <ItemGroup>
     <ClCompile Include="01.Function.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="01.Function.h" />
+    <ClInclude Include="MainWindow.h" />
     <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>

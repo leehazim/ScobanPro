@@ -47,6 +47,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	HWND hWnd;
 	WNDCLASS ws;
 	MSG Msg;
+	g_hInst = hInstance;
 
 	ws.style = CS_VREDRAW | CS_HREDRAW;
 	ws.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
@@ -219,7 +220,8 @@ LRESULT CALLBACK TileProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 
 	case WM_PAINT:
 		hdc = BeginPaint(hwnd, &ps);
-		DrawBitmap(hdc, 0, 0, Tiles[GetWindowLongPtr(hwnd, 0)]);
+		if(GetWindowLongPtr(hwnd,0) >= 0 && GetWindowLongPtr(hwnd, 0) < 5) 
+			DrawBitmap(hdc, 0, 0, Tiles[GetWindowLongPtr(hwnd, 0)]);
 		EndPaint(hwnd, &ps);
 		return 0;
 
