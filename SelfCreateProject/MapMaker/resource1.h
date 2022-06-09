@@ -23,6 +23,8 @@
 #define ID_BTN_MAN						1004
 #define ID_BTN_GOAL						1005
 #define ID_BTN_WAY						1006
+#define ID_BTN_CLEAR					1007
+#define ID_BTN_SAVE						1008
 
 #define ID_SAVE                         40003
 #define ID_LOAD                         40004

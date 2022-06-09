@@ -113,16 +113,26 @@ bool Save() {
 	tmp.cntBox = 0;
 	tmp.cntGoal = 0;
 	tmp.stage = SendDlgItemMessage(g_hMainWnd, ID_LIST, LB_GETCURSEL, 0, 0) + 1;
-
+	int playerExist = 0;
 	for (int i = 0; i < MAX_HEIGHT; i++) {
 		for (int j = 0; j < MAX_WIDTH; j++) {
 			tmp.map[i][j] = GetWindowLongPtr(TileWnd[i][j], 0);
 			if (GetWindowLongPtr(TileWnd[i][j], 0) == BOX) tmp.cntBox++;
 			if (GetWindowLongPtr(TileWnd[i][j], 0) == GOAL) tmp.cntGoal++;
+			if (GetWindowLongPtr(TileWnd[i][j], 0) == MAN) playerExist++;
 		}
 	}
+	 
+	if (playerExist != 1) {
+		MessageBox(g_hMainWnd, L"플레이어는 1개 존재해야합니다.", L"알림", MB_OK);
+		return false;
+	}
+	if (tmp.cntBox != tmp.cntGoal) {
+		MessageBox(g_hMainWnd, L"목적지와 박스의 개수가 맞지 않습니다.", L"다시 시도!", MB_OK);
+		return false;
+	}
 
-	wsprintf(fileName, L"C:\\%s", ID_Stage[tmp.stage - 1]);
+	wsprintf(fileName, L"C:\\Users\\User\\Documents\\Asset\\%s", ID_Stage[tmp.stage - 1]);
 	hFile = CreateFile(fileName, GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hFile == INVALID_HANDLE_VALUE) {
 		MessageBox(g_hMainWnd, TEXT("파일 생성 실패"), TEXT("알림"), MB_OK);
@@ -149,7 +159,7 @@ void Load() {
 	TCHAR fileName[100];
 
 	for(int i = 0; i < Max_stage; i++){
-		wsprintf(fileName, L"C:\\%s", ID_Stage[i]);
+		wsprintf(fileName, L"\\Users\\User\\Documents\\Asset\\%s", ID_Stage[i]);
 		hFile = CreateFile(fileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (hFile == INVALID_HANDLE_VALUE) {
 			sub = (tag_map*)calloc(1, sizeof(tag_map));
@@ -178,6 +188,10 @@ void CreateChild(HWND hwnd) {
 	hListbox = CreateWindow(TEXT("listbox"), NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | LBS_NOTIFY,
 							400, 10, 100, 300, hwnd, (HMENU)ID_LIST, g_hInst, NULL);
 
+	CreateWindow(L"button", L"Clear", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+				 500, 400, 100, 25, hwnd, (HMENU)ID_BTN_CLEAR, g_hInst, NULL);
+	CreateWindow(L"button", L"Save", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+				 610, 400, 100, 25, hwnd, (HMENU)ID_BTN_SAVE, g_hInst, NULL);
 }
 
 int CreateSelect(HWND hwnd) {
@@ -220,4 +234,14 @@ int ChangeSelect(WORD param) {
 		break;
 	}
 	return tmp;
+}
+
+void InitMap() {
+	
+	for (int i = 0; i < MAX_HEIGHT; i++) {
+		for (int j = 0; j < MAX_WIDTH; j++) {
+			SetWindowLongPtr(TileWnd[i][j], 0, 0);
+			InvalidateRect(TileWnd[i][j], NULL, TRUE);
+		}
+	}
 }

@@ -21,3 +21,4 @@ void Load();
 void CreateChild(HWND hwnd);
 int CreateSelect(HWND hwnd);
 int ChangeSelect(WORD param);
+void InitMap();

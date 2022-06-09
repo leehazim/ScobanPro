@@ -1,4 +1,2 @@
-﻿  main.cpp
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\main.cpp(204,6): warning C4101: 'tmp' :참조되지 않은 지역 변수입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\main.cpp(206,8): warning C4101: 'str' :참조되지 않은 지역 변수입니다.
+﻿  01.Function.cpp
   MapMaker.vcxproj -> C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Debug\MapMaker.exe

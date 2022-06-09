@@ -134,7 +134,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 	case WM_COMMAND:
 		switch (LOWORD(wParam)) {
-		case ID_SAVE:
+		case ID_BTN_SAVE:
 			Save();
 			break;
 
@@ -148,6 +148,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		case ID_BTN_GOAL:
 		case ID_BTN_WAY:
 			selectTile = ChangeSelect(LOWORD(wParam));
+			break;
+			
+		case ID_BTN_CLEAR:
+			InitMap();
 			break;
 
 		case ID_LIST:
