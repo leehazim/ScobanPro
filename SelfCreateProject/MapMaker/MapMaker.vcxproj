@@ -152,10 +152,10 @@
     <ResourceCompile Include="MapMaker1.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\Asset\bitmap1.bmp" />
-    <Image Include="..\Asset\bitmap2.bmp" />
-    <Image Include="..\Asset\bitmap3.bmp" />
-    <Image Include="..\Asset\bitmap4.bmp" />
+    <Image Include="C:\Asset\bitmap1.bmp" />
+    <Image Include="C:\Asset\bitmap2.bmp" />
+    <Image Include="C:\Asset\bitmap3.bmp" />
+    <Image Include="C:\Asset\bitmap4.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

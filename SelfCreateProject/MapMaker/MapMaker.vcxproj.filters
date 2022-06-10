@@ -42,16 +42,16 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\Asset\bitmap1.bmp">
+    <Image Include="C:\Asset\bitmap2.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="..\Asset\bitmap2.bmp">
+    <Image Include="C:\Asset\bitmap3.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="..\Asset\bitmap3.bmp">
+    <Image Include="C:\Asset\bitmap4.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="..\Asset\bitmap4.bmp">
+    <Image Include="C:\Asset\bitmap1.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

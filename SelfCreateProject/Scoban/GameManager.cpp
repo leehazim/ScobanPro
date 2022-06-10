@@ -122,8 +122,10 @@ void GameManager::Render(HDC hdc) {
 	TextOut(MemDC, 400, 10, str, lstrlen(str));
 	wsprintf(str, L"이동 : 방향키");
 	TextOut(MemDC, 400, 50, str, lstrlen(str));
-	wsprintf(str, L"이동횟수 : %d", MoveCnt);
+	wsprintf(str, L"현재 스테이지 stage%d", nowStage);
 	TextOut(MemDC, 400, 90, str, lstrlen(str));
+	wsprintf(str, L"이동횟수 : %d", MoveCnt);
+	TextOut(MemDC, 400, 120, str, lstrlen(str));
 	BitBlt(hdc, 0, 0, rt.right - rt.left, rt.bottom - rt.top, MemDC, 0, 0, SRCCOPY);
 
 	
@@ -138,7 +140,7 @@ void GameManager::LoadMap() {
 	TCHAR path[128];
 
 	for (int i = 1; i <= 10; i++) {
-		wsprintf(path, L"C:\\Users\\User\\Documents\\Asset\\stage%d", i);
+		wsprintf(path, L"C:\\Asset\\stage%d", i);
 		hFile = CreateFile(path, GENERIC_READ, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (hFile == INVALID_HANDLE_VALUE) MessageBox(MainWindow::GetSingleInstance()->GetHandleWnd(), L"파일 열기 실패", L"알림", MB_OK);
 		ReadFile(hFile, &tmp, sizeof(tag_Map), &dwRead, NULL);

@@ -132,7 +132,7 @@ bool Save() {
 		return false;
 	}
 
-	wsprintf(fileName, L"C:\\Users\\User\\Documents\\Asset\\%s", ID_Stage[tmp.stage - 1]);
+	wsprintf(fileName, L"C:\\Asset\\%s", ID_Stage[tmp.stage - 1]);
 	hFile = CreateFile(fileName, GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hFile == INVALID_HANDLE_VALUE) {
 		MessageBox(g_hMainWnd, TEXT("파일 생성 실패"), TEXT("알림"), MB_OK);
@@ -159,7 +159,7 @@ void Load() {
 	TCHAR fileName[100];
 
 	for(int i = 0; i < Max_stage; i++){
-		wsprintf(fileName, L"\\Users\\User\\Documents\\Asset\\%s", ID_Stage[i]);
+		wsprintf(fileName, L"\\Asset\\%s", ID_Stage[i]);
 		hFile = CreateFile(fileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (hFile == INVALID_HANDLE_VALUE) {
 			sub = (tag_map*)calloc(1, sizeof(tag_map));
