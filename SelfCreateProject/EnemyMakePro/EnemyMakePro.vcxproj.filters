@@ -27,7 +27,7 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="AutoMove.cpp">
+    <ClCompile Include="01.Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

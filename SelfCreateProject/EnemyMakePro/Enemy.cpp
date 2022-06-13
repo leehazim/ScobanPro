@@ -3,10 +3,6 @@
 Enemy::Enemy(Player* pPlayer) : AutoMove(rand() % 780, rand() % 630) {
 	m_pPlayer = pPlayer;
 	m_nStay = m_nFrame = (rand() % 20) + 1;
-
-	
-	/*if (m_y - m_pPlayer->GetY() > 0) m_y = 630;
-	else m_y = 0;*/
 }
 
 bool Enemy::IsCrash(Player* p) {

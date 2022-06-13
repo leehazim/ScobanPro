@@ -11,7 +11,6 @@ protected:
 public:
 	Enemy(Player* pPlayer);
 
-	//void SetExist(bool Data) { exist = Data; }
 	bool GetExist() { return exist; }
 	int GetX() const { return m_x; }
 	int GetY() const { return m_y; }
