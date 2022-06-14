@@ -6,11 +6,10 @@ class MainWindow
 	:public BaseWindow {
 public:
 	MainWindow();
-	MainWindow(HINSTANCE hInstance);
-	~MainWindow();
+	virtual ~MainWindow();
 
-	bool InitWindow();
-	void Active(int nCmdShow);
+	bool InitWindow(HINSTANCE hInstance, int nCmdShow);
+	MSG Run();
 	static MainWindow* GetSingleInstance();
 
 private:
@@ -20,5 +19,11 @@ private:
 private:
 	static MainWindow* _Instance;
 	static BitmapManager* Bit_Instance;
-	LPCTSTR lpszClass;
+	static LPCTSTR lpszClass;
+
+	int countBox;
+	int countGoal;
+	int countStage;
+	int nowStage;
+	int selectTile;
 };

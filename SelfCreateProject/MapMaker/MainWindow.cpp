@@ -2,12 +2,9 @@
 
 MainWindow* MainWindow::_Instance;
 BitmapManager* MainWindow::Bit_Instance;
+LPCTSTR MainWindow::lpszClass = L"MainWindow";
 
-MainWindow::MainWindow() 
-	: BaseWindow(nullptr), lpszClass(L"MainWindow") {}
-
-MainWindow::MainWindow(HINSTANCE hInstance) 
-	: BaseWindow(hInstance), lpszClass(L"MainWindow") {}
+MainWindow::MainWindow() {}
 
 MainWindow::~MainWindow() {
 	if (Bit_Instance != nullptr)
@@ -44,9 +41,10 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 	return DefWindowProc(hwnd, iMessage, wParam, lParam);
 }
 
-bool MainWindow::InitWindow() {
+bool MainWindow::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 	WndClass.lpfnWndProc = WndProc;
 	WndClass.lpszClassName = lpszClass;
+	WndClass.hInstance = hInstance;
 	RegisterClass(&WndClass);
 
 	m_hWnd = CreateWindow(lpszClass, L"Map Maker", WS_OVERLAPPEDWINDOW,
@@ -54,12 +52,20 @@ bool MainWindow::InitWindow() {
 						  0, 0, NULL, (HMENU)NULL, m_hInst, NULL);
 	if (m_hWnd == NULL) 
 		return false;
+
+	ShowWindow(m_hWnd, nCmdShow);
+	UpdateWindow(m_hWnd);
 	
 	return true;
 }
 
-void MainWindow::Active(int nCmdShow) {
-	ShowWindow(m_hWnd, nCmdShow);
+MSG MainWindow::Run() {
+	MSG Msg;
+	while (GetMessage(&Msg, NULL, 0, 0)) {
+		TranslateMessage(&Msg);
+		DispatchMessage(&Msg);
+	}
+	return Msg;
 }
 
 MainWindow* MainWindow::GetSingleInstance() {

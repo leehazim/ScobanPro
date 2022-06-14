@@ -1,2 +1,7 @@
-﻿  MainWindow.cpp
-  MapMaker.vcxproj -> C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Debug\MapMaker.exe
+﻿  ChildWindow.cpp
+BaseWindow.obj : error LNK2001: 확인할 수 없는 외부 기호 "protected: static struct HINSTANCE__ * BaseWindow::m_hInst" (?m_hInst@BaseWindow@@1PAUHINSTANCE__@@A)
+MainWindow.obj : error LNK2001: 확인할 수 없는 외부 기호 "protected: static struct HINSTANCE__ * BaseWindow::m_hInst" (?m_hInst@BaseWindow@@1PAUHINSTANCE__@@A)
+BaseWindow.obj : error LNK2001: 확인할 수 없는 외부 기호 "protected: static struct HWND__ * BaseWindow::m_hWnd" (?m_hWnd@BaseWindow@@1PAUHWND__@@A)
+MainWindow.obj : error LNK2001: 확인할 수 없는 외부 기호 "protected: static struct HWND__ * BaseWindow::m_hWnd" (?m_hWnd@BaseWindow@@1PAUHWND__@@A)
+ChildWindow.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: static class BitmapManager * ChildWindow::Bit_Instance" (?Bit_Instance@ChildWindow@@0PAVBitmapManager@@A)
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Debug\MapMaker.exe : fatal error LNK1120: 3개의 확인할 수 없는 외부 참조입니다.
