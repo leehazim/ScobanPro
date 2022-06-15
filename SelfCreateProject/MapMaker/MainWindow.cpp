@@ -1,15 +1,11 @@
 #include "MainWindow.h"
 
-MainWindow* MainWindow::_Instance;
-BitmapManager* MainWindow::Bit_Instance;
+MainWindow* MainWindow::_Instance = nullptr;
 LPCTSTR MainWindow::lpszClass = L"MainWindow";
 
 MainWindow::MainWindow() {}
 
 MainWindow::~MainWindow() {
-	if (Bit_Instance != nullptr)
-		delete Bit_Instance;
-
 	if(_Instance != nullptr)
 		delete _Instance;
 }
@@ -19,6 +15,11 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 	switch (iMessage) {
 	case WM_CREATE:
 		SetWindowPos(hwnd, NULL, 0, 0, 800, 640, SWP_NOMOVE);
+		/*for (int i = 0; i < MAX_HEIGHT; i++) {
+			for (int j = 0; j < MAX_WIDTH; j++) {
+				Tiles[i][j] = 
+			}
+		}*/
 		return 0;
 
 	case WM_TIMER:
@@ -45,6 +46,7 @@ bool MainWindow::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 	WndClass.lpfnWndProc = WndProc;
 	WndClass.lpszClassName = lpszClass;
 	WndClass.hInstance = hInstance;
+	WndClass.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1);
 	RegisterClass(&WndClass);
 
 	m_hWnd = CreateWindow(lpszClass, L"Map Maker", WS_OVERLAPPEDWINDOW,
@@ -60,8 +62,9 @@ bool MainWindow::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 }
 
 MSG MainWindow::Run() {
-	MSG Msg;
-	while (GetMessage(&Msg, NULL, 0, 0)) {
+	MSG Msg = { 0 };
+	ChildInfo = new ChildWindow();
+	while (GetMessage(&Msg, nullptr, 0, 0)) {
 		TranslateMessage(&Msg);
 		DispatchMessage(&Msg);
 	}

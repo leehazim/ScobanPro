@@ -9,12 +9,11 @@ public:
 	ChildWindow();
 	virtual ~ChildWindow();
 
-	static BitmapManager* GetBitInsntance();
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 	static HWND MakeTile(int x, int y, int width, int height);
+	virtual bool InitWindow(HINSTANCE, int);
 
 private:
-	static  BitmapManager* Bit_Instance;
 	static LPCTSTR lpszClass;
 };
 

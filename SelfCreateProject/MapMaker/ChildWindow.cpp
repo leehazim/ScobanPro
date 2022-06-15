@@ -11,14 +11,14 @@ ChildWindow::ChildWindow() {
 
 ChildWindow::~ChildWindow() {}
 
-BitmapManager* ChildWindow::GetBitInsntance() {
-	if (Bit_Instance == nullptr)
-		Bit_Instance = new BitmapManager();
-	return Bit_Instance;
-}
 
-LRESULT ChildWindow::WndProc(HWND, UINT, WPARAM, LPARAM) {
-	return LRESULT();
+LRESULT ChildWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
+	switch (iMessage) {
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+	}
+	return DefWindowProc(hwnd, iMessage, wParam, lParam);
 }
 
 HWND ChildWindow::MakeTile(int x, int y, int width, int height) {
@@ -27,4 +27,8 @@ HWND ChildWindow::MakeTile(int x, int y, int width, int height) {
 							 MainWindow::GetSingleInstance()->GetHandleWnd(), (HMENU)NULL,
 							 MainWindow::GetSingleInstance()->GetInstance(), nullptr);
 	return hWnd;
+}
+
+bool ChildWindow::InitWindow(HINSTANCE, int) {
+	return false;
 }

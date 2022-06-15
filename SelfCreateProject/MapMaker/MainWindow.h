@@ -1,6 +1,5 @@
 #pragma once
-#include "BaseWindow.h"
-#include "BitmapManager.h"
+#include "childWindow.h"
 
 class MainWindow
 	:public BaseWindow {
@@ -14,16 +13,16 @@ public:
 
 private:
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-	static void InitBitManager();
 
 private:
 	static MainWindow* _Instance;
-	static BitmapManager* Bit_Instance;
 	static LPCTSTR lpszClass;
+	static HWND Tiles[MAX_HEIGHT][MAX_WIDTH];
 
 	int countBox;
 	int countGoal;
 	int countStage;
 	int nowStage;
 	int selectTile;
+	ChildWindow* ChildInfo;
 };

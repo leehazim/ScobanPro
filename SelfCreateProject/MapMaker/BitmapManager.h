@@ -16,7 +16,9 @@ public:
 	void DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit);
 	void LoadBitFile(HWND hwnd);
 	HBITMAP GetTile(int idx);
-
+	static BitmapManager* GetInstance();
+	
 private:
+	static BitmapManager* _Instance;
 	HBITMAP m_Buffer;
 };

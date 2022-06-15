@@ -1,5 +1,8 @@
 #include "BaseWindow.h"
 
+HINSTANCE BaseWindow::m_hInst;
+HWND BaseWindow::m_hWnd;
+
 BaseWindow::BaseWindow() {
 	WndClass.style = CS_HREDRAW | CS_VREDRAW;
 	WndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);

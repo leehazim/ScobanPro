@@ -1,13 +1,15 @@
 #include "BitmapManager.h"
 #include "MainWindow.h"
+
 const int BitmapManager::Max_Cnt_Tile = 5;
+BitmapManager* BitmapManager::_Instance = nullptr;
 
 BitmapManager::BitmapManager() {
 	
 }
 
 BitmapManager::~BitmapManager() {
-
+	delete _Instance;
 }
 
 void BitmapManager::DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit) {
@@ -30,4 +32,11 @@ void BitmapManager::LoadBitFile(HWND hwnd) {
 
 HBITMAP BitmapManager::GetTile(int idx) {
 	return m_Tile[idx];
+}
+
+BitmapManager* BitmapManager::GetInstance() {
+	if (_Instance == nullptr) {
+		_Instance = new BitmapManager();
+	}
+	return _Instance;
 }
