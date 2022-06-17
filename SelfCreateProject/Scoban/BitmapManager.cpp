@@ -7,7 +7,8 @@ BitmapManager::BitmapManager() {
 }
 
 BitmapManager::~BitmapManager() {
-
+	for(int i = 0; i<4; i++)
+		DeleteObject(m_Tile[i]);
 }
 
 void BitmapManager::DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit) {

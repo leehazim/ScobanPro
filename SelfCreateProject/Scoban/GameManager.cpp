@@ -4,6 +4,7 @@ const int GameManager::Max_Width;
 const int GameManager::Max_Height;
 const int GameManager::Max_Stage;
 
+
 GameManager::GameManager():
 	px(-1),
 	py(-1),
@@ -106,6 +107,7 @@ void GameManager::Render(HDC hdc) {
 	
 	GetClientRect(MainWindow::GetSingleInstance()->GetHandleWnd(), &rt);
 	MemDC = CreateCompatibleDC(hdc);
+
 	if(hBit == nullptr)
 		hBit = CreateCompatibleBitmap(hdc, rt.right, rt.bottom);
 	OldBitmap = (HBITMAP)SelectObject(MemDC, hBit);

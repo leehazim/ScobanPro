@@ -11,6 +11,11 @@ public:
 
 	bool InitWindow();
 	void Active(int nCmdShow);
+	MSG Run();
+
+	void OnCreate();
+	void OnUpdate();
+	void OnDestroy();
 	static MainWindow* GetSingleInstance();
 	static BitmapManager* GetBitmapManager();
 	static GameManager* GetGameInstance();
@@ -25,4 +30,6 @@ private:
 	static BitmapManager* Bit_Instance;
 	static MainWindow* _Instance;
 	LPCTSTR lpszClass;
+
+	HDC m_hDC;
 };
