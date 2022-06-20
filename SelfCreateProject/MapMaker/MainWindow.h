@@ -24,5 +24,5 @@ private:
 	int countStage;
 	int nowStage;
 	int selectTile;
-	ChildWindow* ChildInfo;
+	static ChildWindow* ChildInfo;
 };

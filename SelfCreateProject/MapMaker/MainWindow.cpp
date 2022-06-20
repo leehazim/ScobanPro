@@ -2,8 +2,12 @@
 
 MainWindow* MainWindow::_Instance = nullptr;
 LPCTSTR MainWindow::lpszClass = L"MainWindow";
+HWND MainWindow::Tiles[MAX_HEIGHT][MAX_WIDTH];
+ChildWindow* MainWindow::ChildInfo;
 
-MainWindow::MainWindow() {}
+MainWindow::MainWindow() {
+	
+}
 
 MainWindow::~MainWindow() {
 	if(_Instance != nullptr)
@@ -15,11 +19,7 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 	switch (iMessage) {
 	case WM_CREATE:
 		SetWindowPos(hwnd, NULL, 0, 0, 800, 640, SWP_NOMOVE);
-		/*for (int i = 0; i < MAX_HEIGHT; i++) {
-			for (int j = 0; j < MAX_WIDTH; j++) {
-				Tiles[i][j] = 
-			}
-		}*/
+		ChildInfo->Show();
 		return 0;
 
 	case WM_TIMER:
@@ -64,6 +64,12 @@ bool MainWindow::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 MSG MainWindow::Run() {
 	MSG Msg = { 0 };
 	ChildInfo = new ChildWindow();
+	ChildInfo->InitWindow(this->GetInstance(), 0);
+	for (int i = 0; i < MAX_HEIGHT; i++) {
+		for (int j = 0; j < MAX_WIDTH; j++) {
+			 ChildInfo->MakeTile(j, i, 32, 32);
+		}
+	}
 	while (GetMessage(&Msg, nullptr, 0, 0)) {
 		TranslateMessage(&Msg);
 		DispatchMessage(&Msg);

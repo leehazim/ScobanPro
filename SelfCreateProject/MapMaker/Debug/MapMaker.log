@@ -1,11 +1,1 @@
-﻿  MainWindow.cpp
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\MainWindow.cpp(66): error C2259: 'ChildWindow': 추상 클래스를 인스턴스화할 수 없습니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\childWindow.h(6): message : 'ChildWindow' 선언을 참조하십시오.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\MainWindow.cpp(66): message : 다음 멤버가 원인입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\MainWindow.cpp(66): message : 'bool BaseWindow::InitWindow(HINSTANCE,int)': abstract입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\BaseWindow.h(12): message : 'BaseWindow::InitWindow' 선언을 참조하십시오.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\MainWindow.cpp(66,29): error C2259: 'ChildWindow': 추상 클래스를 인스턴스화할 수 없습니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\childWindow.h(6): message : 'ChildWindow' 선언을 참조하십시오.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\MainWindow.cpp(66,29): message : 다음 멤버가 원인입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\MainWindow.cpp(66,29): message : 'bool BaseWindow::InitWindow(HINSTANCE,int)': abstract입니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\BaseWindow.h(12): message : 'BaseWindow::InitWindow' 선언을 참조하십시오.
+﻿  MapMaker.vcxproj -> C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Debug\MapMaker.exe

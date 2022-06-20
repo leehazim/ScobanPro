@@ -130,7 +130,8 @@ void MainWindow::OnUpdate() {
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
 		Game_Instance->Move(VK_DOWN);
 	}
-	Sleep(60);
+
+	Sleep(100);
 
 	if (Game_Instance->CheckClear()) {
 		OutputDebugString(L"Clear!");

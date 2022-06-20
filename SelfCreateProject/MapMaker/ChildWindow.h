@@ -10,8 +10,12 @@ public:
 	virtual ~ChildWindow();
 
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-	static HWND MakeTile(int x, int y, int width, int height);
+	static void MakeTile(int x, int y, int width, int height);
+	
 	virtual bool InitWindow(HINSTANCE, int);
+
+	static HWND Tiles[MAX_HEIGHT][MAX_WIDTH];
+	static void Show();
 
 private:
 	static LPCTSTR lpszClass;
