@@ -3,6 +3,8 @@
 MainWindow* MainWindow::_Instance;
 BitmapManager* MainWindow::Bit_Instance;
 GameManager* MainWindow::Game_Instance;
+bool MainWindow::isClear = false;
+bool MainWindow::restart = false;
 
 MainWindow::MainWindow() 
 	: BaseWindow(nullptr), lpszClass(L"MainWindow") {}
@@ -23,17 +25,16 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		InitGameManager();
 		Bit_Instance->LoadBitFile(hwnd);
 		Game_Instance->LoadMap();*/
+		SetTimer(hwnd, 1, 10, nullptr);
 		return 0;
 
 	case WM_TIMER:
-		/*if (Game_Instance->CheckClear()) {
+		if (isClear) {
 			KillTimer(hwnd, 1);
-			if (MessageBox(hwnd, L"클리어!\n 다음스테이지로 이동합니다.", L"축하합니다!", MB_OKCANCEL) == IDOK) {
-				if (Game_Instance->SetStage(Game_Instance->GetStage() + 1))
-					return 0;
-				SendMessage(hwnd, MESSAGE_START, 0, 0);
+			if (MessageBox(hwnd, L"Clear!", L"알림", MB_OK) == IDOK) {
+				restart = true;
 			}
-		}*/
+		}
 		return 0;
 
 	case WM_PAINT:
@@ -48,11 +49,11 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		return 0;
 
 	case WM_KEYDOWN:
-		/*switch (wParam) {
+		switch (wParam) {
 		case 'R':
 			SendMessage(hwnd, MESSAGE_START, 0, 0);
 		}
-		Game_Instance->Move(wParam);*/
+		Game_Instance->Move(wParam);
 		return 0;
 
 	case WM_DESTROY:
@@ -114,30 +115,20 @@ void MainWindow::OnCreate() {
 	Game_Instance->LoadMap();
 	Game_Instance->InitStage();
 	m_hDC = GetDC(m_hWnd);
+	isClear = false;
 }
 
 void MainWindow::OnUpdate() {
 
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
-		Game_Instance->Move(VK_LEFT);
-	}
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-		Game_Instance->Move(VK_RIGHT);
-	}
-	if (GetAsyncKeyState(VK_UP) & 0x8000) {
-		Game_Instance->Move(VK_UP);
-	}
-	if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
-		Game_Instance->Move(VK_DOWN);
-	}
-
-	Sleep(100);
-
 	if (Game_Instance->CheckClear()) {
 		OutputDebugString(L"Clear!");
-		if (GetAsyncKeyState('R') & 0x8000) {
+		isClear = true;
+		if (restart) {
 			Game_Instance->SetStage(Game_Instance->GetStage()+1);
 			Game_Instance->InitStage();
+			isClear = false;
+			restart = false;
+			SetTimer(m_hWnd, 1, 10, nullptr);
 		}
 	}
 

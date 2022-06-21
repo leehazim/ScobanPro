@@ -32,4 +32,6 @@ private:
 	LPCTSTR lpszClass;
 
 	HDC m_hDC;
+	static bool isClear;
+	static bool restart;
 };

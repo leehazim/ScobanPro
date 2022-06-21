@@ -1,13 +1,18 @@
 #include "MainWindow.h"
+#include "BitmapManager.h"
 
 MainWindow* MainWindow::_Instance = nullptr;
-LPCTSTR MainWindow::lpszClass = L"MainWindow";
 HWND MainWindow::Tiles[MAX_HEIGHT][MAX_WIDTH];
-ChildWindow* MainWindow::ChildInfo;
+LPCTSTR MainWindow::lpszClass = L"MainWindow";
+LPCTSTR MainWindow::lpszChild = L"ChildWindow";
 
-MainWindow::MainWindow() {
-	
-}
+MainWindow::MainWindow() :
+	countBox(0),
+	countGoal(0),
+	countStage(10),
+	nowStage(0),
+	selectTile(0)
+{}
 
 MainWindow::~MainWindow() {
 	if(_Instance != nullptr)
@@ -19,7 +24,11 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 	switch (iMessage) {
 	case WM_CREATE:
 		SetWindowPos(hwnd, NULL, 0, 0, 800, 640, SWP_NOMOVE);
-		ChildInfo->Show();
+		for (int i = 0; i < MAX_HEIGHT; i++)
+			for (int j = 0; j < MAX_WIDTH; j++)
+				Tiles[i][j] = CreateWindow(lpszChild, nullptr, WS_CHILD | WS_VISIBLE | WS_BORDER,
+										   j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT,
+										   hwnd, (HMENU)nullptr, m_hInst, nullptr);
 		return 0;
 
 	case WM_TIMER:
@@ -42,11 +51,35 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 	return DefWindowProc(hwnd, iMessage, wParam, lParam);
 }
 
+LRESULT MainWindow::ChildProc(HWND child, UINT Msg, WPARAM wParam, LPARAM lParam) {
+	switch (Msg) {
+	case WM_CREATE:
+		SetWindowLongPtr(child, 1, 0);
+		return 0;
+	case WM_PAINT:
+	{
+		HDC hdc;
+		PAINTSTRUCT ps;
+	}
+	return 0;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+	}
+	return DefWindowProc(child, Msg, wParam, lParam);
+}
+
 bool MainWindow::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 	WndClass.lpfnWndProc = WndProc;
 	WndClass.lpszClassName = lpszClass;
 	WndClass.hInstance = hInstance;
 	WndClass.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1);
+	RegisterClass(&WndClass);
+
+	WndClass.lpfnWndProc = ChildProc;
+	WndClass.lpszClassName = lpszChild;
+	WndClass.lpszMenuName = nullptr;
+	WndClass.cbWndExtra = sizeof(int);
 	RegisterClass(&WndClass);
 
 	m_hWnd = CreateWindow(lpszClass, L"Map Maker", WS_OVERLAPPEDWINDOW,
@@ -63,13 +96,7 @@ bool MainWindow::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 
 MSG MainWindow::Run() {
 	MSG Msg = { 0 };
-	ChildInfo = new ChildWindow();
-	ChildInfo->InitWindow(this->GetInstance(), 0);
-	for (int i = 0; i < MAX_HEIGHT; i++) {
-		for (int j = 0; j < MAX_WIDTH; j++) {
-			 ChildInfo->MakeTile(j, i, 32, 32);
-		}
-	}
+
 	while (GetMessage(&Msg, nullptr, 0, 0)) {
 		TranslateMessage(&Msg);
 		DispatchMessage(&Msg);

@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include "resource1.h"
 class BaseWindow {
 public:
 	BaseWindow();

@@ -33,9 +33,6 @@
     <ClCompile Include="BaseWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ChildWindow.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="01.Function.h">
@@ -51,9 +48,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="BaseWindow.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ChildWindow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
