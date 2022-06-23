@@ -3,8 +3,10 @@
 
 MainWindow* MainWindow::_Instance = nullptr;
 HWND MainWindow::Tiles[MAX_HEIGHT][MAX_WIDTH];
+HDC MainWindow::m_ChildDC[MAX_HEIGHT][MAX_WIDTH];
 LPCTSTR MainWindow::lpszClass = L"MainWindow";
 LPCTSTR MainWindow::lpszChild = L"ChildWindow";
+
 
 MainWindow::MainWindow() :
 	countBox(0),
@@ -24,15 +26,19 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 	switch (iMessage) {
 	case WM_CREATE:
 		SetWindowPos(hwnd, NULL, 0, 0, 800, 640, SWP_NOMOVE);
-		for (int i = 0; i < MAX_HEIGHT; i++)
-			for (int j = 0; j < MAX_WIDTH; j++)
+		BitmapManager::GetInstance()->LoadBitFile(m_hWnd);
+		for (int i = 0; i < MAX_HEIGHT; i++) {
+			for (int j = 0; j < MAX_WIDTH; j++) {
 				Tiles[i][j] = CreateWindow(lpszChild, nullptr, WS_CHILD | WS_VISIBLE | WS_BORDER,
 										   j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT,
 										   hwnd, (HMENU)nullptr, m_hInst, nullptr);
+				SetWindowLongPtr(Tiles[i][j], 1, BitmapManager::tag_tile::WALL);
+			}
+		}
 		return 0;
 
 	case WM_TIMER:
-
+		
 		return 0;
 
 	case WM_PAINT:
@@ -56,12 +62,19 @@ LRESULT MainWindow::ChildProc(HWND child, UINT Msg, WPARAM wParam, LPARAM lParam
 	case WM_CREATE:
 		SetWindowLongPtr(child, 1, 0);
 		return 0;
-	case WM_PAINT:
-	{
-		HDC hdc;
-		PAINTSTRUCT ps;
+
+	case WM_PAINT: {
+		HDC hdc; PAINTSTRUCT ps;
+		hdc = BeginPaint(child, &ps);
+		for (int i = 0; i < MAX_HEIGHT; i++) {
+			for (int j = 0; j < MAX_WIDTH; j++) {
+				BitmapManager::GetInstance()->DrawBitmap(hdc, 0, 0, BitmapManager::GetInstance()->GetTile(GetWindowLongPtr(child, 1)));
+			}
+		}
+		EndPaint(child, &ps);
 	}
 	return 0;
+
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
@@ -69,7 +82,13 @@ LRESULT MainWindow::ChildProc(HWND child, UINT Msg, WPARAM wParam, LPARAM lParam
 	return DefWindowProc(child, Msg, wParam, lParam);
 }
 
+void MainWindow::Update() {
+
+}
+
 bool MainWindow::InitWindow(HINSTANCE hInstance, int nCmdShow) {
+	m_hInst = hInstance;
+
 	WndClass.lpfnWndProc = WndProc;
 	WndClass.lpszClassName = lpszClass;
 	WndClass.hInstance = hInstance;
@@ -97,7 +116,9 @@ bool MainWindow::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 MSG MainWindow::Run() {
 	MSG Msg = { 0 };
 
-	while (GetMessage(&Msg, nullptr, 0, 0)) {
+	m_MainDC = GetDC(m_hWnd);
+
+	while (GetMessage(&Msg, nullptr, 0,0)) {
 		TranslateMessage(&Msg);
 		DispatchMessage(&Msg);
 	}

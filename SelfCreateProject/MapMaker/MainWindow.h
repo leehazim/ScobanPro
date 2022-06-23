@@ -1,12 +1,11 @@
 #pragma once
 #include "BaseWindow.h"
 
-class BaseWindow;
 class FileManager;
 class BitmapManager;
 
 class MainWindow
-	:public BaseWindow, public BitmapManager {
+	:public BaseWindow {
 public:
 	MainWindow();
 	virtual ~MainWindow();
@@ -19,6 +18,8 @@ private:
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 	static LRESULT CALLBACK ChildProc(HWND, UINT, WPARAM, LPARAM);
 
+	void Update();
+
 private:
 	static MainWindow* _Instance;
 	static LPCTSTR lpszClass;
@@ -30,4 +31,8 @@ private:
 	int countStage;
 	int nowStage;
 	int selectTile;
+
+	HDC m_MainDC;
+	static HDC m_ChildDC[MAX_HEIGHT][MAX_WIDTH];
+	
 };

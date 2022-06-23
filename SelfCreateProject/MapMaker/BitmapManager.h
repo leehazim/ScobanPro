@@ -9,13 +9,14 @@ public:
 
 public:
 	enum tag_tile { WALL, BOX, MAN, GOAL, WAY };
-	HBITMAP m_Tile[5];
+	static HBITMAP m_Tile[5];
 	BitmapManager();
 	~BitmapManager();
 
 	void DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit);
 	void LoadBitFile(HWND hwnd);
 	HBITMAP GetTile(int idx);
+
 	static BitmapManager* GetInstance();
 	
 private:

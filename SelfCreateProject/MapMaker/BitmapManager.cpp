@@ -2,6 +2,7 @@
 #include "MainWindow.h"
 
 const int BitmapManager::Max_Cnt_Tile = 5;
+HBITMAP BitmapManager::m_Tile[5];
 BitmapManager* BitmapManager::_Instance = nullptr;
 
 BitmapManager::BitmapManager() {
@@ -9,12 +10,14 @@ BitmapManager::BitmapManager() {
 }
 
 BitmapManager::~BitmapManager() {
+	for (int i = 0; i < 4; i++) DeleteObject(m_Tile[i]);
 	delete _Instance;
 }
 
 void BitmapManager::DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit) {
 	BITMAP bit;
 	if (hBit == nullptr) return;
+
 	GetObject(hBit, sizeof(BITMAP), &bit);
 	HDC MemDC = CreateCompatibleDC(hdc);
 	HBITMAP OldBitmap = (HBITMAP)SelectObject(MemDC, hBit);
@@ -24,9 +27,11 @@ void BitmapManager::DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit) {
 }
 
 void BitmapManager::LoadBitFile(HWND hwnd) {
-	for (int i = 0; i < Max_Cnt_Tile - 1; i++) 
-		m_Tile[i] = LoadBitmap(MainWindow::GetSingleInstance()->GetInstance(),
-							   MAKEINTRESOURCE(IDB_BITMAP1+i));
+	for (int i = 0; i < Max_Cnt_Tile - 1; i++) {
+	
+		m_Tile[i] = LoadBitmap(MainWindow::GetSingleInstance()->GetInstance(), MAKEINTRESOURCE(IDB_BITMAP1 + i));
+	}
+
 	m_Tile[4] = nullptr;
 }
 
