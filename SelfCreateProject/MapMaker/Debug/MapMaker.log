@@ -1,2 +1,25 @@
-﻿  BitmapManager.cpp
-  MapMaker.vcxproj -> C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Debug\MapMaker.exe
+﻿  Apllication.cpp
+  BitmapManager.cpp
+  FileMgr.cpp
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(17,58): error C2065: 'BOX': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(17,63): error C2065: 'tmp': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(18,58): error C2065: 'GOAL': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(18,64): error C2065: 'tmp': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(19,58): error C2065: 'MAN': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(24,14): error C2065: 'g_hMainWnd': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(27,6): error C2065: 'tmp': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(27,20): error C2065: 'tmp': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(28,14): error C2065: 'g_hMainWnd': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(32,11): error C2065: 'fileName': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(32,39): error C2065: 'ID_Stage': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(32,48): error C2065: 'tmp': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(33,2): error C2065: 'hFile': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(33,21): error C2065: 'fileName': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(34,6): error C2065: 'hFile': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(35,14): error C2065: 'g_hMainWnd': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(38,12): error C2065: 'hFile': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(38,20): error C2065: 'tmp': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(38,43): error C2065: 'dwWrite': 선언되지 않은 식별자입니다.
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\FileMgr.cpp(39,14): error C2065: 'hFile': 선언되지 않은 식별자입니다.
+  MainWindow.cpp
+  코드를 생성하고 있습니다...

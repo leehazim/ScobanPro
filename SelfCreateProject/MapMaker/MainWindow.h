@@ -13,6 +13,7 @@ public:
 	bool InitWindow(HINSTANCE hInstance, int nCmdShow);
 	MSG Run();
 	static MainWindow* GetSingleInstance();
+	static HWND GetTile(int x, int y);
 
 private:
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -34,5 +35,4 @@ private:
 
 	HDC m_MainDC;
 	static HDC m_ChildDC[MAX_HEIGHT][MAX_WIDTH];
-	
 };

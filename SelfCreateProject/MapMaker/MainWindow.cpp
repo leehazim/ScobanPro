@@ -130,3 +130,7 @@ MainWindow* MainWindow::GetSingleInstance() {
 		_Instance = new MainWindow();
 	return _Instance;
 }
+
+HWND MainWindow::GetTile(int x, int y) {
+	return Tiles[y][x];
+}
