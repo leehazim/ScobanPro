@@ -14,7 +14,9 @@ public:
 	MSG Run();
 	static MainWindow* GetSingleInstance();
 	static HWND GetTile(int x, int y);
-
+	static WCHAR* GetStageName(int idx);
+	static const int GetMaxStage();
+	
 private:
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 	static LRESULT CALLBACK ChildProc(HWND, UINT, WPARAM, LPARAM);
@@ -35,4 +37,6 @@ private:
 
 	HDC m_MainDC;
 	static HDC m_ChildDC[MAX_HEIGHT][MAX_WIDTH];
+	static const int Max_stage;
+	static WCHAR* m_IdStage[10];
 };

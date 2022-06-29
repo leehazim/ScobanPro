@@ -17,7 +17,8 @@ public:
 	static bool Load();
 
 private:
-	static tag_map m_Buffer;
+	static tag_map m_WriteBuffer;
+	static tag_map m_LoadBuffer[10];
 	static HANDLE m_hFile;
 	static DWORD m_dwWrite, m_dwRead;
 	static WCHAR m_FileName[100];

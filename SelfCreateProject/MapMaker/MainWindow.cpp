@@ -6,6 +6,8 @@ HWND MainWindow::Tiles[MAX_HEIGHT][MAX_WIDTH];
 HDC MainWindow::m_ChildDC[MAX_HEIGHT][MAX_WIDTH];
 LPCTSTR MainWindow::lpszClass = L"MainWindow";
 LPCTSTR MainWindow::lpszChild = L"ChildWindow";
+const int MainWindow::Max_stage = 10;
+WCHAR* MainWindow::m_IdStage[10];
 
 
 MainWindow::MainWindow() :
@@ -14,7 +16,13 @@ MainWindow::MainWindow() :
 	countStage(10),
 	nowStage(0),
 	selectTile(0)
-{}
+{ 
+	WCHAR stageName[100];
+	for (int i = 0; i < Max_stage; i++) {
+		wsprintf(stageName, L"stage%d", i + 1);
+		wsprintf(m_IdStage[i], stageName);
+	}
+}
 
 MainWindow::~MainWindow() {
 	if(_Instance != nullptr)
@@ -133,4 +141,12 @@ MainWindow* MainWindow::GetSingleInstance() {
 
 HWND MainWindow::GetTile(int x, int y) {
 	return Tiles[y][x];
+}
+
+WCHAR* MainWindow::GetStageName(int idx) {
+	return m_IdStage[idx];
+}
+
+const int MainWindow::GetMaxStage() {
+	return Max_stage;
 }
