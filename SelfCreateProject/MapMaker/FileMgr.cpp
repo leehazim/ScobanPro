@@ -3,6 +3,7 @@
 #include "BitmapManager.h"
 
 tag_map FileMgr::m_WriteBuffer = {0};
+tag_map FileMgr::m_LoadBuffer[10] = {0};
 HANDLE FileMgr::m_hFile = nullptr;
 DWORD FileMgr::m_dwWrite = 0;
 DWORD FileMgr::m_dwRead = 0;
@@ -55,12 +56,14 @@ bool FileMgr::Load() {
 			tag_map* sub = (tag_map*)calloc(1, sizeof(tag_map));
 			m_LoadBuffer[i] = *sub;
 			free(sub);
+			return false;
 		}
 		ReadFile(m_hFile, &m_LoadBuffer[i], sizeof(tag_map), &m_dwRead, NULL);
 		CloseHandle(m_hFile);
 	}
 
 	for (int i = 0; i < MainWindow::GetSingleInstance()->GetMaxStage(); i++) {
-		Maps[i] = m_LoadBuffer[i];
+		MainWindow::GetSingleInstance()->GetMap(i) = m_LoadBuffer[i];
 	}
+	return true;
 }
