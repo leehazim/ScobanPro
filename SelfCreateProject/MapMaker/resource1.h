@@ -30,6 +30,7 @@
 #define ID_LOAD                         40004
 
 #define MESSAGE_CHANGE					WM_USER  +10
+#define ID_TILEBUFFER					1
 
 
 // Next default values for new objects

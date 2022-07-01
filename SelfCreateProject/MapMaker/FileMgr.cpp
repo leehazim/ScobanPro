@@ -15,24 +15,24 @@ bool FileMgr::Save() {
 	int playerExist = 0;
 	for (int i = 0; i < MAX_HEIGHT; i++) {
 		for (int j = 0; j < MAX_WIDTH; j++) {
-			m_WriteBuffer.Map[i][j] = GetWindowLongPtr(MainWindow::GetTile(j, i), 0);
-			if (GetWindowLongPtr(MainWindow::GetTile(j, i), 0) == BitmapManager::tag_tile::BOX)
+			m_WriteBuffer.Map[i][j] = GetWindowLongPtr(MainWindow::GetTile(i, j), ID_TILEBUFFER);
+			if (GetWindowLongPtr(MainWindow::GetTile(j, i), ID_TILEBUFFER) == BitmapManager::tag_tile::BOX)
 				m_WriteBuffer.cntBox++;
-			if (GetWindowLongPtr(MainWindow::GetTile(j, i), 0) == BitmapManager::tag_tile::GOAL)
+			if (GetWindowLongPtr(MainWindow::GetTile(j, i), ID_TILEBUFFER) == BitmapManager::tag_tile::GOAL)
 				m_WriteBuffer.cntGoal++;
-			if (GetWindowLongPtr(MainWindow::GetTile(j, i), 0) == BitmapManager::tag_tile::MAN)
+			if (GetWindowLongPtr(MainWindow::GetTile(j, i), ID_TILEBUFFER) == BitmapManager::tag_tile::MAN)
 				playerExist++;
 		}
 	}
 
-	if (playerExist != 1) {
+	/*if (playerExist != 1) {
 		MessageBox(MainWindow::GetSingleInstance()->GetHandleWnd(), L"플레이어는 1개 존재해야합니다.", L"알림", MB_OK);
 		return false;
 	}
 	if (m_WriteBuffer.cntBox != m_WriteBuffer.cntGoal) {
 		MessageBox(MainWindow::GetSingleInstance()->GetHandleWnd(), L"목적지와 박스의 개수가 맞지 않습니다.", L"다시 시도!", MB_OK);
 		return false;
-	}
+	}*/
 
 	wsprintf(m_FileName, L"C:\\Asset\\%s", MainWindow::GetSingleInstance()->GetStageName(m_WriteBuffer.stage - 1));
 	m_hFile = CreateFile(m_FileName, GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);

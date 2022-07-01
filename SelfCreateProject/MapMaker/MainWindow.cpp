@@ -14,12 +14,12 @@ int MainWindow::m_ClientWidth = 800;
 int MainWindow::m_ClientHeight = 600;
 HWND MainWindow::m_hStatic = nullptr;
 HWND MainWindow::m_hListbox = nullptr;
-int MainWindow::countBox= 0;
-int MainWindow::countGoal= 0;
-int MainWindow::countStage= 0;
-int MainWindow::countEnemy= 0;
-int MainWindow::nowStage= 0;
-int MainWindow::selectTile= 0;
+int MainWindow::countBox = 0;
+int MainWindow::countGoal = 0;
+int MainWindow::countStage = 0;
+int MainWindow::countEnemy = 0;
+int MainWindow::nowStage = 0;
+int MainWindow::selectTile = 0;
 
 
 MainWindow::MainWindow() :
@@ -47,6 +47,7 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		SetWindowPos(hwnd, NULL, 0, 0, rt.right, rt.bottom, SWP_NOMOVE);
 		BitmapManager::GetInstance()->LoadBitFile(m_hWnd);
 		MakeChild(hwnd);
+		FileMgr::Load();
 	}
 	return 0;
 
@@ -63,7 +64,7 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		countBox = 0;
 		for (int i = 0; i < MAX_HEIGHT; i++) {
 			for (int j = 0; j < MAX_WIDTH; j++) {
-				tmp = GetWindowLongPtr(Tiles[i][j], 1);
+				tmp = GetWindowLongPtr(Tiles[i][j], ID_TILEBUFFER);
 				if (tmp == BitmapManager::tag_tile::GOAL) countGoal++;
 				else if (tmp == BitmapManager::tag_tile::BOX) countBox++;
 			}
@@ -101,7 +102,7 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 			case LBN_SELCHANGE:
 				for (int j = 0; j < MAX_HEIGHT; j++) {
 					for (int k = 0; k < MAX_WIDTH; k++) {
-						Map[nowStage].Map[j][k] = GetWindowLongPtr(Tiles[j][k], 1);
+						Map[nowStage].Map[j][k] = GetWindowLongPtr(Tiles[j][k], ID_TILEBUFFER);
 						Map[nowStage].cntBox = countBox;
 						Map[nowStage].cntGoal = countGoal;
 					}
@@ -110,7 +111,7 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 
 				for (int i = 0; i < MAX_HEIGHT; i++) {
 					for (int j = 0; j < MAX_WIDTH; j++) {
-						SetWindowLongPtr(Tiles[i][j], 1, Map[nowStage].Map[i][j]);
+						SetWindowLongPtr(Tiles[i][j], ID_TILEBUFFER, Map[nowStage].Map[i][j]);
 						InvalidateRect(Tiles[i][j], NULL, TRUE);
 					}
 				}
@@ -134,32 +135,35 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 	}
 	return DefWindowProc(hwnd, iMessage, wParam, lParam);
 }
+
 void MainWindow::InitMap() {
 	for (int i = 0; i < MAX_HEIGHT; i++) {
 		for (int j = 0; j < MAX_WIDTH; j++) {
-			SetWindowLongPtr(Tiles[i][j], 1, 0);
+			SetWindowLongPtr(Tiles[i][j], ID_TILEBUFFER, BitmapManager::tag_tile::BOX);
 			InvalidateRect(Tiles[i][j], NULL, TRUE);
 		}
 	}
 }
 
 LRESULT MainWindow::ChildProc(HWND child, UINT Msg, WPARAM wParam, LPARAM lParam) {
+	HDC hdc; PAINTSTRUCT ps;
+
 	switch (Msg) {
 	case WM_CREATE:
-		SetWindowLongPtr(child, 1, 0);
+		SetWindowLongPtr(child, ID_TILEBUFFER, BitmapManager::tag_tile::BOX);
 		return 0;
 
 	case WM_PAINT: {
-		HDC hdc; PAINTSTRUCT ps;
 		hdc = BeginPaint(child, &ps);
-		BitmapManager::GetInstance()->DrawBitmap(hdc, 0, 0, BitmapManager::GetInstance()->GetTile(GetWindowLongPtr(child, 1)));
-		
+		int tmp = GetWindowLongPtr(child, ID_TILEBUFFER);
+		BitmapManager::GetInstance()->DrawBitmap(hdc, 0, 0, BitmapManager::GetInstance()->GetTile(tmp));
+		/*DrawBitmap(hdc, 0, 0, BitmapManager::GetInstance()->GetTile(3));*/
 		EndPaint(child, &ps);
 	}
-	return 0;
+		return 0;
 
 	case WM_LBUTTONDOWN:
-		SetWindowLongPtr(child, 1, selectTile);
+		SetWindowLongPtr(child, ID_TILEBUFFER, selectTile);
 		InvalidateRect(child, NULL, TRUE);
 
 		SendMessage(m_hWnd, MESSAGE_CHANGE, 0, 0);
@@ -176,10 +180,9 @@ LRESULT MainWindow::ChildProc(HWND child, UINT Msg, WPARAM wParam, LPARAM lParam
 void MainWindow::MakeChild(HWND hwnd) {
 	for (int i = 0; i < MAX_HEIGHT; i++) {
 		for (int j = 0; j < MAX_WIDTH; j++) {
-			Tiles[i][j] = CreateWindow(lpszChild, nullptr, WS_CHILD | WS_VISIBLE | WS_BORDER,
+			Tiles[i][j] = CreateWindow(lpszChild, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
 									   j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT,
-									   hwnd, (HMENU)nullptr, m_hInst, nullptr);
-			SetWindowLongPtr(Tiles[i][j], 1, BitmapManager::tag_tile::WALL);
+									   hwnd, (HMENU)NULL, m_hInst, NULL);
 		}
 	}
 

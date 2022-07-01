@@ -8,7 +8,7 @@ public:
 	static const int Max_Cnt_Tile;
 
 public:
-	enum tag_tile { WALL, BOX, MAN, GOAL, WAY };
+	static enum tag_tile { WALL, BOX, MAN, GOAL, WAY };
 	static HBITMAP m_Tile[5];
 	BitmapManager();
 	~BitmapManager();

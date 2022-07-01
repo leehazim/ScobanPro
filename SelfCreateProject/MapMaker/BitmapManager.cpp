@@ -4,6 +4,7 @@
 const int BitmapManager::Max_Cnt_Tile = 5;
 HBITMAP BitmapManager::m_Tile[5];
 BitmapManager* BitmapManager::_Instance = nullptr;
+enum BitmapManager::tag_tile;
 
 BitmapManager::BitmapManager() {
 	
