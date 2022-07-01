@@ -16,7 +16,7 @@ public:
 	static HWND GetTile(int x, int y);
 	static WCHAR* GetStageName(int idx);
 	static const int GetMaxStage();
-	static tag_map GetMap(int idx);
+	static tag_map& GetMap(int idx);
 
 private:
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

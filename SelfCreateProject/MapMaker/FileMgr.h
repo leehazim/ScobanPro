@@ -16,11 +16,15 @@ public:
 	static bool Save();
 	static bool Load();
 
+	static FileMgr* GetInstance();
+
 private:
 	static tag_map m_WriteBuffer;
 	static tag_map m_LoadBuffer[10];
 	static HANDLE m_hFile;
 	static DWORD m_dwWrite, m_dwRead;
 	static WCHAR m_FileName[100];
+
+	static FileMgr* _Instance;
 };
 

@@ -34,6 +34,8 @@ MainWindow::MainWindow() :
 }
 
 MainWindow::~MainWindow() {
+	for (int i = 0; i < Max_stage; i++)
+		delete[] m_IdStage[i];
 	if(_Instance != nullptr)
 		delete _Instance;
 }
@@ -47,7 +49,8 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		SetWindowPos(hwnd, NULL, 0, 0, rt.right, rt.bottom, SWP_NOMOVE);
 		BitmapManager::GetInstance()->LoadBitFile(m_hWnd);
 		MakeChild(hwnd);
-		FileMgr::Load();
+		FileMgr::GetInstance()->Load();
+		SendMessage(hwnd, MESSAGE_CHANGE, 0, 0);
 	}
 	return 0;
 
@@ -72,17 +75,27 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 
 		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), countBox, countGoal);
 		SetWindowText(m_hStatic, str);
+
+		nowStage = SendDlgItemMessage(hwnd, ID_LIST, LB_GETCURSEL, 0, 0);
+		for (int i = 0; i < MAX_HEIGHT; i++) {
+			for (int j = 0; j < MAX_WIDTH; j++) {
+				SetWindowLongPtr(Tiles[i][j], ID_TILEBUFFER, Map[nowStage].Map[i][j]);
+				InvalidateRect(Tiles[i][j], nullptr, true);
+			}
+		}
 	}
 		return 0;
 
 	case WM_COMMAND:
 		switch (LOWORD(wParam)) {
+		case ID_SAVE:
 		case ID_BTN_SAVE:
-			FileMgr::Save();
+			FileMgr::GetInstance()->Save();
 			break;
 
 		case ID_LOAD:
-			FileMgr::Load();
+			FileMgr::GetInstance()->Load();
+			SendMessage(hwnd, MESSAGE_CHANGE, 0, 0);
 			break;
 
 		case ID_BTN_WALL:
@@ -125,10 +138,6 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		}
 		return 0;
 
-	case WM_KEYDOWN:
-	
-		return 0;
-
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
@@ -139,7 +148,7 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 void MainWindow::InitMap() {
 	for (int i = 0; i < MAX_HEIGHT; i++) {
 		for (int j = 0; j < MAX_WIDTH; j++) {
-			SetWindowLongPtr(Tiles[i][j], ID_TILEBUFFER, BitmapManager::tag_tile::BOX);
+			SetWindowLongPtr(Tiles[i][j], ID_TILEBUFFER, BitmapManager::tag_tile::WALL);
 			InvalidateRect(Tiles[i][j], NULL, TRUE);
 		}
 	}
@@ -150,7 +159,7 @@ LRESULT MainWindow::ChildProc(HWND child, UINT Msg, WPARAM wParam, LPARAM lParam
 
 	switch (Msg) {
 	case WM_CREATE:
-		SetWindowLongPtr(child, ID_TILEBUFFER, BitmapManager::tag_tile::BOX);
+		SetWindowLongPtr(child, ID_TILEBUFFER, BitmapManager::tag_tile::WALL);
 		return 0;
 
 	case WM_PAINT: {
@@ -306,6 +315,6 @@ const int MainWindow::GetMaxStage() {
 	return Max_stage;
 }
 
-tag_map MainWindow::GetMap(int idx) {
+tag_map& MainWindow::GetMap(int idx) {
 	return Map[idx];
 }
