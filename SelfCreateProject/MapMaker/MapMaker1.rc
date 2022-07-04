@@ -73,6 +73,8 @@ IDB_BITMAP3             BITMAP                  "C:\\Asset\\bitmap3.bmp"
 
 IDB_BITMAP4             BITMAP                  "C:\\Asset\\bitmap4.bmp"
 
+IDB_BITMAP5             BITMAP                  "c:\\asset\\bitmap5.bmp"
+
 #endif    // 한국어(대한민국) resources
 /////////////////////////////////////////////////////////////////////////////
 

@@ -1,3 +1,3 @@
 ﻿  MainWindow.cpp
-D:\Github\ScobanPro\SelfCreateProject\MapMaker\BitmapManager.h(11): warning C4091: 'static ': 변수를 선언하지 않으면 'BitmapManager::tag_tile' 왼쪽은 무시됩니다.
-  MapMaker.vcxproj -> D:\Github\ScobanPro\SelfCreateProject\Debug\MapMaker.exe
+C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\MapMaker\BitmapManager.h(11): warning C4091: 'static ': 변수를 선언하지 않으면 'BitmapManager::tag_tile' 왼쪽은 무시됩니다.
+  MapMaker.vcxproj -> C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Debug\MapMaker.exe

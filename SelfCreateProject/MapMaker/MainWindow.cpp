@@ -102,6 +102,7 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 		case ID_BTN_BOX:
 		case ID_BTN_MAN:
 		case ID_BTN_GOAL:
+		case ID_BTN_ENEMY:
 		case ID_BTN_WAY:
 			selectTile = ChangeSelect(LOWORD(wParam));
 			break;
@@ -171,12 +172,25 @@ LRESULT MainWindow::ChildProc(HWND child, UINT Msg, WPARAM wParam, LPARAM lParam
 	}
 		return 0;
 
-	case WM_LBUTTONDOWN:
+	case WM_LBUTTONDOWN: {
 		SetWindowLongPtr(child, ID_TILEBUFFER, selectTile);
 		InvalidateRect(child, NULL, TRUE);
 
-		SendMessage(m_hWnd, MESSAGE_CHANGE, 0, 0);
+		WCHAR str[100];
+		int tmp;
+		countGoal = 0;
+		countBox = 0;
+		for (int i = 0; i < MAX_HEIGHT; i++) {
+			for (int j = 0; j < MAX_WIDTH; j++) {
+				tmp = GetWindowLongPtr(Tiles[i][j], ID_TILEBUFFER);
+				if (tmp == BitmapManager::tag_tile::GOAL) countGoal++;
+				else if (tmp == BitmapManager::tag_tile::BOX) countBox++;
+			}
+		}
 
+		wsprintf(str, TEXT("박스 개수 = %d, 골개수 = %d"), countBox, countGoal);
+		SetWindowText(m_hStatic, str);
+	}
 		return 0;
 
 	case WM_DESTROY:
@@ -221,8 +235,10 @@ void MainWindow::MakeChild(HWND hwnd) {
 				 400, 360, 100, 30, hwnd, (HMENU)ID_BTN_MAN, m_hInst, NULL);
 	CreateWindow(L"button", L"GOAL", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
 				 400, 390, 100, 30, hwnd, (HMENU)ID_BTN_GOAL, m_hInst, NULL);
+	CreateWindow(L"button", L"Enemy", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+				 400, 420, 100, 30, hwnd, (HMENU)ID_BTN_ENEMY, m_hInst, NULL);
 	CreateWindow(L"button", L"WAY", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
-				 400, 420, 100, 30, hwnd, (HMENU)ID_BTN_WAY, m_hInst, NULL);
+				 400, 450, 100, 30, hwnd, (HMENU)ID_BTN_WAY, m_hInst, NULL);
 	CheckRadioButton(hwnd, ID_BTN_WALL, ID_BTN_WAY, ID_BTN_WALL);
 	selectTile = 0;
 }
@@ -246,8 +262,12 @@ int MainWindow::ChangeSelect(WORD param) {
 		tmp = 3;
 		CheckRadioButton(m_hWnd, ID_BTN_WALL, ID_BTN_WAY, ID_BTN_GOAL);
 		break;
-	case ID_BTN_WAY:
+	case ID_BTN_ENEMY:
 		tmp = 4;
+		CheckRadioButton(m_hWnd, ID_BTN_WALL, ID_BTN_WAY, ID_BTN_ENEMY);
+		break;
+	case ID_BTN_WAY:
+		tmp = 5;
 		CheckRadioButton(m_hWnd, ID_BTN_WALL, ID_BTN_WAY, ID_BTN_WAY);
 		break;
 	}

@@ -137,7 +137,6 @@ void MainWindow::OnUpdate() {
 
 void MainWindow::OnDestroy() {
 	ReleaseDC(m_hWnd, m_hDC);
-	delete Bit_Instance;
 	delete Game_Instance;
 }
 

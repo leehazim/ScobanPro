@@ -165,6 +165,7 @@
     <ResourceCompile Include="MapMaker1.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\..\..\..\asset\bitmap5.bmp" />
     <Image Include="C:\Asset\bitmap1.bmp" />
     <Image Include="C:\Asset\bitmap2.bmp" />
     <Image Include="C:\Asset\bitmap3.bmp" />

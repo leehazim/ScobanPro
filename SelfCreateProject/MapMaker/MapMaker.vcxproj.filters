@@ -75,5 +75,8 @@
     <Image Include="C:\Asset\bitmap1.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="..\..\..\..\..\..\..\asset\bitmap5.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>

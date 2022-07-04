@@ -23,10 +23,12 @@ void BitmapManager::DrawBitmap(HDC hdc, int x, int y, HBITMAP hBit) {
 }
 
 void BitmapManager::LoadBitFile(HWND hwnd) {
-	for (int i = 0; i < Max_Cnt_Tile - 1; i++) 
-		m_Tile[i] = LoadBitmap(MainWindow::GetSingleInstance()->GetInstance(),
-							   MAKEINTRESOURCE(IDB_BITMAP1+i));
-	m_Tile[4] = nullptr;
+	for (int i = 0; i < Max_Cnt_Tile; i++) {
+		WCHAR str[100];
+		wsprintf(str, L"C:/Asset/Bitmap%i.bmp", i + 1);
+		m_Tile[i] = (HBITMAP)LoadImage(MainWindow::GetSingleInstance()->GetInstance(), str, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	}
+	m_Tile[WAY] = nullptr;
 }
 
 HBITMAP BitmapManager::GetTile(int idx) {
