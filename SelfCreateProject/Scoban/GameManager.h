@@ -2,6 +2,13 @@
 #include <vector>
 #include "BitmapManager.h"
 
+struct Enemy {
+	int ex, ey;
+	int stay;
+	int movecount;
+	bool isExist;
+};
+
 class GameManager {
 private:
 	static const int Max_Width = 10;
@@ -21,6 +28,7 @@ private:
 	int nowStage;
 	int px, py;
 	int MoveCnt;
+	std::vector<Enemy*> enemies;
 
 	BitmapManager* BitDrawer;
 
@@ -35,5 +43,7 @@ public:
 	bool CheckClear();
 	void Render(HDC hdc);
 	void LoadMap();
+	void EnemyMove();
+	void InitEnemy();
 };
 

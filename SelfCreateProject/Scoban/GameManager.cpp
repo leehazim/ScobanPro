@@ -10,7 +10,8 @@ GameManager::GameManager():
 	py(-1),
 	nowStage(1),
 	MoveCnt(0),
-	hBit(nullptr) {
+	hBit(nullptr),
+	EnemyInited(false) {
 	BitDrawer = MainWindow::GetSingleInstance()->GetBitmapManager();
 }
 
@@ -150,6 +151,88 @@ void GameManager::LoadMap() {
 
 		Maps.push_back(tmp);
 	}
+}
+
+void GameManager::EnemyMove() {
+	int dx = 0, dy = 0;
+	int dir = rand() % 12;
+	if (dir < 3) {
+		dx = +1; dy = 0;
+	}
+	else if (dir < 6) {
+		dx = -1; dy = 0;
+	}
+	else if (dir < 9) {
+		dx = 0; dy = 1;
+	}
+	else {
+		dx = 0; dy = -1;
+	}
+	
+	for (int i = 0; i < enemies.size(); i++) {
+		if (enemies[i]->movecount < 0) {
+			enemies[i]->movecount = enemies[i]->stay;
+			int x = enemies[i]->ex;
+			int y = enemies[i]->ey;
+			if (MemMap[y + dy][x + dx] != BitmapManager::tag_tile::WALL) { /* 벽이 아닌 경우*/
+				if (MemMap[y + dy][x + dx] == BitmapManager::tag_tile::WAY ||
+					MemMap[y + dy][x + dx] == BitmapManager::tag_tile::GOAL) { /* 이동하려는 경로가 빈공간인 경우*/
+					if (it->Map[y][x] == BitmapManager::tag_tile::GOAL)
+						MemMap[y][x] = BitmapManager::tag_tile::GOAL;
+					else
+						MemMap[y][x] = BitmapManager::tag_tile::WAY;
+					MemMap[y + dy][x + dx] = BitmapManager::tag_tile::ENEMY;
+				}
+				else { /* 이동하려는 경로에 박스가 있는 경우 */
+					if (MemMap[y + (dy * 2)][x + (dx * 2)] == BitmapManager::tag_tile::WALL ||
+						MemMap[y + (dy * 2)][x + (dx * 2)] == BitmapManager::tag_tile::BOX) {
+						dx = dy = 0;
+					}
+					else if (MemMap[y + (dy * 2)][x + (dx * 2)] == BitmapManager::tag_tile::WAY ||
+							 MemMap[y + (dy * 2)][x + (dx * 2)] == BitmapManager::tag_tile::GOAL) {
+						if (it->Map[y][x] == BitmapManager::tag_tile::GOAL)
+							MemMap[y][x] = BitmapManager::tag_tile::GOAL;
+						else
+							MemMap[y][x] = BitmapManager::tag_tile::WAY;
+
+						MemMap[y + (dy * 2)][x + (dx * 2)] = BitmapManager::tag_tile::BOX;
+						MemMap[y + dy][x + dx] = BitmapManager::tag_tile::ENEMY;
+					}
+				}
+			}
+			else { /* 이동하려는 곳이 벽인 경우 이동 불가*/
+				dx = dy = 0;
+			}
+			if (dx != 0 || dy != 0) MoveCnt++;
+			x += dx;
+			y += dy;
+			enemies[i]->ex = x;
+			enemies[i]->ey = y;
+		}
+	}
+	InvalidateRect(MainWindow::GetSingleInstance()->GetHandleWnd(), nullptr, false);
+}
+
+void GameManager::InitEnemy() {
+	if (EnemyInited) return;
+	for (int i = 0; i < enemies.size(); i++)
+		if (enemies[i] != nullptr) delete enemies[i];
+	enemies.clear();
+
+	for (int i = 0; i < MAX_HEIGHT; i++) {
+		for (int j = 0; j < MAX_WIDTH; j++) {
+			if (Maps[nowStage].Map[i][j] == BitmapManager::ENEMY) {
+				Enemy* temp = new Enemy();
+				temp->ex = j;
+				temp->ey = i;
+				temp->isExist = true;
+				temp->stay = rand() % 20;
+				temp->movecount = temp->stay;
+				enemies.push_back(temp);
+			}
+		}
+	}
+	EnemyInited = true;
 }
 
 int& GameManager::GetStage() {

@@ -6,6 +6,7 @@ GameManager* MainWindow::Game_Instance;
 bool MainWindow::isClear = false;
 bool MainWindow::restart = false;
 
+
 MainWindow::MainWindow() 
 	: BaseWindow(nullptr), lpszClass(L"MainWindow") {}
 
@@ -20,11 +21,6 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 	HDC hdc; PAINTSTRUCT ps;
 	switch (iMessage) {
 	case WM_CREATE:
-		/*SetWindowPos(hwnd, NULL, 0, 0, 800, 640, SWP_NOMOVE);
-		InitBitManager();
-		InitGameManager();
-		Bit_Instance->LoadBitFile(hwnd);
-		Game_Instance->LoadMap();*/
 		SetTimer(hwnd, 1, 10, nullptr);
 		return 0;
 
@@ -33,6 +29,7 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 			KillTimer(hwnd, 1);
 			if (MessageBox(hwnd, L"Clear!", L"¾Ë¸²", MB_OK) == IDOK) {
 				restart = true;
+				EnemyInited = false;
 			}
 		}
 		return 0;
@@ -119,6 +116,8 @@ void MainWindow::OnCreate() {
 }
 
 void MainWindow::OnUpdate() {
+	Game_Instance->InitEnemy();
+	Game_Instance->EnemyMove();
 
 	if (Game_Instance->CheckClear()) {
 		OutputDebugString(L"Clear!");

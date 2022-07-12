@@ -34,4 +34,5 @@ private:
 	HDC m_hDC;
 	static bool isClear;
 	static bool restart;
+	static bool enemyInited;
 };
