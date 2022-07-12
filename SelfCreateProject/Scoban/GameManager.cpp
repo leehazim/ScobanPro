@@ -10,8 +10,7 @@ GameManager::GameManager():
 	py(-1),
 	nowStage(1),
 	MoveCnt(0),
-	hBit(nullptr),
-	EnemyInited(false) {
+	hBit(nullptr) {
 	BitDrawer = MainWindow::GetSingleInstance()->GetBitmapManager();
 }
 
@@ -214,7 +213,6 @@ void GameManager::EnemyMove() {
 }
 
 void GameManager::InitEnemy() {
-	if (EnemyInited) return;
 	for (int i = 0; i < enemies.size(); i++)
 		if (enemies[i] != nullptr) delete enemies[i];
 	enemies.clear();
@@ -232,7 +230,6 @@ void GameManager::InitEnemy() {
 			}
 		}
 	}
-	EnemyInited = true;
 }
 
 int& GameManager::GetStage() {
