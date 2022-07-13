@@ -1,4 +1,5 @@
 #include "MainWindow.h"
+#include <time.h>
 
 MainWindow* MainWindow::_Instance;
 BitmapManager* MainWindow::Bit_Instance;
@@ -106,6 +107,7 @@ MSG MainWindow::Run() {
 void MainWindow::OnCreate() {
 
 	SetWindowPos(m_hWnd, NULL, 0, 0, 800, 640, SWP_NOMOVE);
+	/*srand(time(nullptr));*/
 	InitBitManager();
 	InitGameManager();
 	Bit_Instance->LoadBitFile(m_hWnd);
@@ -116,7 +118,10 @@ void MainWindow::OnCreate() {
 }
 
 void MainWindow::OnUpdate() {
-	if(!enemyInited)Game_Instance->InitEnemy();
+	if (!enemyInited) {
+		Game_Instance->InitEnemy();
+		enemyInited = true;
+	}
 	Game_Instance->EnemyMove();
 
 	if (Game_Instance->CheckClear()) {

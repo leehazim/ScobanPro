@@ -1,6 +1,2 @@
-﻿  GameManager.cpp
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Scoban\GameManager.cpp(171,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Scoban\GameManager.cpp(216,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  MainWindow.cpp
-  코드를 생성하고 있습니다...
+﻿  MainWindow.cpp
   Scoban.vcxproj -> C:\Users\User\Documents\GitHub\ScobanPro\SelfCreateProject\Debug\Scoban.exe
