@@ -10,7 +10,8 @@ GameManager::GameManager():
 	py(-1),
 	nowStage(0),
 	MoveCnt(0),
-	hBit(nullptr) {
+	hBit(nullptr),
+	IsCollision(false) {
 	BitDrawer = MainWindow::GetSingleInstance()->GetBitmapManager();
 }
 
@@ -59,6 +60,9 @@ void GameManager::Move(int Key) {
 				MemMap[py][px] = BitmapManager::tag_tile::WAY;
 			MemMap[py + dy][px + dx] = BitmapManager::tag_tile::MAN;
 		}
+		else if (MemMap[py + dy][px + dx] == BitmapManager::tag_tile::ENEMY) {
+			IsCollision = true;
+		}
 		else { /* 이동하려는 경로에 박스가 있는 경우 */
 			if (MemMap[py + (dy * 2)][px + (dx * 2)] == BitmapManager::tag_tile::WALL ||
 				MemMap[py + (dy * 2)][px + (dx * 2)] == BitmapManager::tag_tile::BOX) {
@@ -87,7 +91,8 @@ void GameManager::Move(int Key) {
 
 bool GameManager::CheckClear() {
 	it = Maps.begin();
-	for (int i = 1; i < nowStage; i++) it++;
+	for (int i = 0; i < nowStage; i++) it++;
+
 	for (int i = 0; i < Max_Height; i++) {
 		for (int j = 0; j < Max_Width; j++) {
 			if (it->Map[i][j] == BitmapManager::tag_tile::GOAL && MemMap[i][j] != BitmapManager::tag_tile::BOX) {
@@ -153,19 +158,30 @@ void GameManager::LoadMap() {
 }
 
 void GameManager::EnemyMove() {
+	if (IsCollision) return;
 	int dx = 0, dy = 0;
-	int dir = rand() % 12;
-	if (dir < 3) {
-		dx = +1; dy = 0;
-	}
-	else if (dir < 6) {
+	int dir = rand() % 13;
+	switch (dir) {
+	case 1:
+	case 3:
+	case 5:
+		dx = 1; dy = 0;
+		break;
+	case 4:
+	case 8:
+	case 11:
 		dx = -1; dy = 0;
-	}
-	else if (dir < 9) {
-		dx = 0; dy = 1;
-	}
-	else {
+		break;
+	case 6:
+	case 10:
+	case 7:
 		dx = 0; dy = -1;
+		break;
+	case 2:
+	case 9:
+	case 12:
+		dx = 0; dy = 1;
+		break;
 	}
 	
 	for (int i = 0; i < enemies.size(); i++) {
@@ -173,7 +189,7 @@ void GameManager::EnemyMove() {
 			enemies[i]->movecount = enemies[i]->stay;
 			int x = enemies[i]->ex;
 			int y = enemies[i]->ey;
-			if (MemMap[y + dy][x + dx] != BitmapManager::tag_tile::WALL || 
+			if (MemMap[y + dy][x + dx] != BitmapManager::tag_tile::WALL && 
 				MemMap[y + dy][x + dx] != BitmapManager::tag_tile::BOX) { /* 벽이 아닌 경우*/
 				if (MemMap[y + dy][x + dx] == BitmapManager::tag_tile::WAY ||
 					MemMap[y + dy][x + dx] == BitmapManager::tag_tile::GOAL) { /* 이동하려는 경로가 빈공간인 경우*/
@@ -182,6 +198,9 @@ void GameManager::EnemyMove() {
 					else
 						MemMap[y][x] = BitmapManager::tag_tile::WAY;
 					MemMap[y + dy][x + dx] = BitmapManager::tag_tile::ENEMY;
+				}
+				if (MemMap[y + dy][x + dx] == BitmapManager::tag_tile::MAN) {
+					Collision();
 				}
 			}
 			else { /* 이동하려는 곳이 벽인 경우 이동 불가*/
@@ -196,6 +215,10 @@ void GameManager::EnemyMove() {
 		enemies[i]->movecount--;
 	}
 	InvalidateRect(MainWindow::GetSingleInstance()->GetHandleWnd(), nullptr, false);
+}
+
+void GameManager::Collision() {
+	IsCollision = true;
 }
 
 void GameManager::InitEnemy() {

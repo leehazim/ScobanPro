@@ -33,6 +33,13 @@ LRESULT MainWindow::WndProc(HWND hwnd, UINT iMessage, WPARAM wParam, LPARAM lPar
 				enemyInited = false;
 			}
 		}
+		if (Game_Instance->GetIsCollision()) {
+			KillTimer(hwnd, 1);
+			if (MessageBox(hwnd, L"Collision GameOver", L"¾Ë¸²", MB_OK) == IDOK) {
+				restart = true;
+				enemyInited = false;
+			}
+		}
 		return 0;
 
 	case WM_PAINT:
@@ -107,7 +114,7 @@ MSG MainWindow::Run() {
 void MainWindow::OnCreate() {
 
 	SetWindowPos(m_hWnd, NULL, 0, 0, 800, 640, SWP_NOMOVE);
-	/*srand(time(nullptr));*/
+	srand(time(nullptr));
 	InitBitManager();
 	InitGameManager();
 	Bit_Instance->LoadBitFile(m_hWnd);
@@ -127,13 +134,14 @@ void MainWindow::OnUpdate() {
 	if (Game_Instance->CheckClear()) {
 		OutputDebugString(L"Clear!");
 		isClear = true;
-		if (restart) {
-			Game_Instance->SetStage(Game_Instance->GetStage()+1);
-			Game_Instance->InitStage();
-			isClear = false;
-			restart = false;
-			SetTimer(m_hWnd, 1, 10, nullptr);
-		}
+	}
+	if (restart) {
+		Game_Instance->SetStage(Game_Instance->GetStage() + 1);
+		Game_Instance->InitStage();
+		isClear = false;
+		restart = false;
+		Game_Instance->SetIsCollision(false);
+		SetTimer(m_hWnd, 1, 10, nullptr);
 	}
 
 	Game_Instance->Render(m_hDC);

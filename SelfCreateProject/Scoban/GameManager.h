@@ -28,6 +28,7 @@ private:
 	int nowStage;
 	int px, py;
 	int MoveCnt;
+	bool IsCollision;
 	std::vector<Enemy*> enemies;
 
 	BitmapManager* BitDrawer;
@@ -45,5 +46,9 @@ public:
 	void LoadMap();
 	void EnemyMove();
 	void InitEnemy();
+	void Collision();
+
+	bool GetIsCollision() const { return IsCollision; }
+	void SetIsCollision(bool b) { IsCollision = b; }
 };
 
